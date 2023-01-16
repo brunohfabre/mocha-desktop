@@ -1,0 +1,41 @@
+export const colors = {
+  black: '#000000',
+  white: '#FFFFFF',
+
+  gray50: '#FAFAFA',
+  gray100: '#F4F4F5',
+  gray200: '#E4E4E7',
+  gray300: '#D4D4D8',
+  gray400: '#A1A1AA',
+  gray500: '#71717A',
+  gray600: '#52525B',
+  gray700: '#3F3F46',
+  gray800: '#27272A',
+  gray900: '#18181B',
+
+  violet100: '#EDE9FE',
+  violet200: '#DDD6FE',
+  violet300: '#C4B5FD',
+  violet400: '#A78BFA',
+  violet500: '#8B5CF6',
+  violet600: '#7C3AED',
+  violet700: '#6D28D9',
+  violet800: '#5B21B6',
+  violet900: '#4C1D95',
+
+  red100: '#FEE2E2',
+  red200: '#FECACA',
+  red300: '#FCA5A5',
+  red400: '#F87171',
+  red500: '#EF4444',
+  red600: '#DC2626',
+  red700: '#B91C1C',
+  red800: '#991B1B',
+  red900: '#7F1D1D',
+
+  appBackground: '$white',
+  shape: '$white',
+  shapeBorder: '$gray200',
+
+  textTitle: '$gray900',
+}
