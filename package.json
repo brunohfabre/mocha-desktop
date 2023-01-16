@@ -1,7 +1,7 @@
 {
   "name": "mocha",
   "productName": "Mocha",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "Simple application to help with project management.",
   "main": "./out/main/index.js",
   "author": "Bruno Fabre",
