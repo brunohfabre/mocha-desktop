@@ -47,7 +47,7 @@ export function Workspaces() {
 
       <Container>
         <header>
-          <Heading>Workspaces</Heading>
+          <Heading size="md">Workspaces</Heading>
 
           <Button type="button" onClick={() => setCreateModalVisible(true)}>
             <Plus weight="bold" />

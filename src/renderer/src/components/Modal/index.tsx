@@ -1,4 +1,4 @@
-import { ReactNode } from 'react'
+import { ComponentProps, ReactNode } from 'react'
 
 import { X } from 'phosphor-react'
 
@@ -14,15 +14,21 @@ type ModalProps = {
   onOpenChange: (value: boolean) => void
   title: string
   children: ReactNode
-}
+} & ComponentProps<typeof Content>
 
-export function Modal({ open, onOpenChange, title, children }: ModalProps) {
+export function Modal({
+  open,
+  onOpenChange,
+  title,
+  children,
+  ...props
+}: ModalProps) {
   return (
     <Dialog.Root open={open} onOpenChange={onOpenChange}>
       <Dialog.Portal>
         <Overlay />
 
-        <Content asChild>
+        <Content asChild {...props}>
           <Card>
             <header>
               <Dialog.Title asChild>

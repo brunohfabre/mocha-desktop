@@ -5,8 +5,8 @@ export const Container = styled('div', {
   display: 'flex',
   flexDirection: 'column',
 
-  padding: 24,
-  gap: 24,
+  padding: 16,
+  gap: 16,
 
   header: {
     display: 'flex',

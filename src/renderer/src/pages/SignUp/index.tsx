@@ -106,7 +106,7 @@ export function SignUp() {
             error={errors.confirmPassword?.message}
           />
 
-          <Button isLoading={isLoading}>sign up</Button>
+          <Button isLoading={isLoading}>Sign up</Button>
         </form>
       </Content>
 

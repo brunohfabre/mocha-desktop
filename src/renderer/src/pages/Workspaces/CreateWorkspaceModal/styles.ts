@@ -7,7 +7,7 @@ export const Container = styled('form', {
   gap: 8,
 
   footer: {
-    marginTop: 24,
+    marginTop: 16,
 
     display: 'flex',
     justifyContent: 'flex-end',

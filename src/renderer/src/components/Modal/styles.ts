@@ -40,4 +40,19 @@ export const Content = styled(Dialog.Content, {
     justifyContent: 'space-between',
     padding: '8px 8px 16px 16px',
   },
+
+  variants: {
+    size: {
+      sm: {
+        maxWidth: 440,
+      },
+      md: {
+        maxWidth: 556,
+      },
+    },
+  },
+
+  defaultVariants: {
+    size: 'md',
+  },
 })

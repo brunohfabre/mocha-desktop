@@ -12,11 +12,16 @@ import { Text } from '../Text'
 import { Container, ProfileContainer, WorkspacesContainer } from './styles'
 
 type PageHeaderProps = {
+  isAuth?: boolean
   spacing?: boolean
   showWorkspace?: boolean
 }
 
-export function PageHeader({ spacing, showWorkspace = true }: PageHeaderProps) {
+export function PageHeader({
+  isAuth,
+  spacing,
+  showWorkspace = true,
+}: PageHeaderProps) {
   const navigate = useNavigate()
 
   const user = useAuthStore((state) => state.user)
@@ -46,29 +51,33 @@ export function PageHeader({ spacing, showWorkspace = true }: PageHeaderProps) {
       />
 
       <Container css={{ paddingLeft: spacing ? 86 : 16 }}>
-        {showWorkspace && workspace?.id && (
-          <WorkspacesContainer onClick={() => navigate('/workspaces')}>
-            {workspace?.name}
-            <CaretDown />
-          </WorkspacesContainer>
+        {!isAuth && (
+          <>
+            {showWorkspace && workspace?.id && (
+              <WorkspacesContainer onClick={() => navigate('/workspaces')}>
+                <Text size="sm">{workspace?.name}</Text>
+                <CaretDown />
+              </WorkspacesContainer>
+            )}
+
+            <Dropdown>
+              <ProfileContainer>
+                <Text size="sm">{user?.name}</Text>
+
+                <Avatar />
+              </ProfileContainer>
+
+              <DropdownContent>
+                <DropdownItem
+                  type="danger"
+                  onClick={() => setConfirmSignOutVisible(true)}
+                >
+                  Sign out
+                </DropdownItem>
+              </DropdownContent>
+            </Dropdown>
+          </>
         )}
-
-        <Dropdown>
-          <ProfileContainer>
-            <Text size="sm">{user?.name}</Text>
-
-            <Avatar />
-          </ProfileContainer>
-
-          <DropdownContent>
-            <DropdownItem
-              type="danger"
-              onClick={() => setConfirmSignOutVisible(true)}
-            >
-              Sign out
-            </DropdownItem>
-          </DropdownContent>
-        </Dropdown>
       </Container>
     </>
   )

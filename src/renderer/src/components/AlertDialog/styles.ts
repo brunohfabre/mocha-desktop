@@ -40,7 +40,7 @@ export const Content = styled(Card, {
     display: 'flex',
     justifyContent: 'flex-end',
     gap: 8,
-    marginTop: 24,
+    marginTop: 16,
   },
 
   '&:focus': {

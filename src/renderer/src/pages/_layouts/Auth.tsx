@@ -6,7 +6,7 @@ import { Container } from './styles'
 export function AuthLayout() {
   return (
     <Container>
-      <PageHeader />
+      <PageHeader isAuth />
 
       <Outlet />
     </Container>

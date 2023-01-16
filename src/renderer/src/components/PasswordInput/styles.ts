@@ -15,6 +15,7 @@ export const Input = styled('input', {
   fontSize: '$sm',
   transition: 'all 0.150s',
   height: 40,
+  cursor: 'text',
 
   '&::placeholder': {
     color: '$gray300',

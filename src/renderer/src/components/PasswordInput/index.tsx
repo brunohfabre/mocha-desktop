@@ -1,8 +1,9 @@
 import { ComponentProps, forwardRef, useState } from 'react'
+
 import { Eye, EyeSlash } from 'phosphor-react'
 
-import { Button, Container, Input, InputContainer } from './styles'
 import { Text } from '../Text'
+import { Button, Container, Input, InputContainer } from './styles'
 
 type PasswordInputProps = {
   label: string

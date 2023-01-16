@@ -75,7 +75,12 @@ export function CreateWorkspaceModal({
   )
 
   return (
-    <Modal open={open} onOpenChange={handleClose} title="New workspace">
+    <Modal
+      open={open}
+      onOpenChange={handleClose}
+      title="New workspace"
+      size="sm"
+    >
       <Container onSubmit={handleSubmit(handleCreateWorkspace as any)}>
         <TextInput
           label="Name"

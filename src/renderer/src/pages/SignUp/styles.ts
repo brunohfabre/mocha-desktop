@@ -31,7 +31,7 @@ export const Content = styled('div', {
     marginTop: 32,
 
     '> button': {
-      marginTop: 24,
+      marginTop: 16,
     },
   },
 })
