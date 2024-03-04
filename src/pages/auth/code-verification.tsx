@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, Navigate, useLocation } from 'react-router-dom'
 
 import { Loader2 } from 'lucide-react'
 import { z } from 'zod'
@@ -8,17 +8,22 @@ import { z } from 'zod'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { useAuth } from '@/contexts/auth'
 import { api } from '@/lib/api'
 import { zodResolver } from '@hookform/resolvers/zod'
 
 const formSchema = z.object({
-  email: z.string().min(1).email(),
+  code: z.string().min(1),
 })
 
 type FormData = z.infer<typeof formSchema>
 
-export function SignIn() {
-  const navigate = useNavigate()
+export function CodeVerification() {
+  const location = useLocation()
+
+  const state = location.state as { email: string } | undefined
+
+  const { signIn } = useAuth()
 
   const { handleSubmit, register, formState } = useForm<FormData>({
     resolver: zodResolver(formSchema),
@@ -26,22 +31,22 @@ export function SignIn() {
 
   const [isLoading, setIsLoading] = useState(false)
 
-  async function sendVerificationCode({ email }: FormData) {
+  async function sendVerificationCode({ code }: FormData) {
     try {
       setIsLoading(true)
 
-      await api.post('/authenticate', {
-        email,
+      const response = await api.post('/auth-links/authenticate', {
+        code,
       })
 
-      navigate('/code-verification', {
-        state: {
-          email,
-        },
-      })
+      signIn(response.data)
     } finally {
       setIsLoading(false)
     }
+  }
+
+  if (!state?.email) {
+    return <Navigate to="/sign-in" replace />
   }
 
   return (
@@ -51,14 +56,16 @@ export function SignIn() {
         onSubmit={handleSubmit(sendVerificationCode)}
       >
         <div>
-          <h1 className="text-2xl font-semibold">Sign in</h1>
-          <span className="text-sm text-muted-foreground">Welcome back 👋</span>
+          <h1 className="text-2xl font-semibold">Code verify</h1>
+          <span className="text-sm text-muted-foreground">
+            To sign in, enter code sent by email below.
+          </span>
         </div>
         <div className="space-y-1">
-          <Label>Email</Label>
-          <Input placeholder="Email" {...register('email')} />
+          <Label>Code</Label>
+          <Input placeholder="Code" {...register('code')} />
           <span className="text-sm text-red-500">
-            {formState.errors.email?.message}
+            {formState.errors.code?.message}
           </span>
         </div>
 
@@ -66,14 +73,14 @@ export function SignIn() {
           {isLoading ? (
             <Loader2 size={16} className="animate-spin" />
           ) : (
-            'Sign in'
+            'Verify code'
           )}
         </Button>
       </form>
 
       <footer className="p-4 text-center">
         <p className="text-muted-foreground text-sm leading-relaxed w-full max-w-80 md:max-w-none">
-          By clicking sign in, you agree to our{' '}
+          By clicking verify code, you agree to our{' '}
           <Link
             to="/terms-of-service"
             className="underline underline-offset-4 hover:text-primary"

@@ -14,7 +14,7 @@ type Session = {
 interface AuthContextData {
   session: Session | null
 
-  signIn: () => void
+  signIn: (data: Session) => void
   signOut: () => void
 }
 
@@ -25,14 +25,25 @@ interface AuthContextProviderProps {
 }
 
 export function AuthContextProvider({ children }: AuthContextProviderProps) {
-  const [session] = useState(null)
+  const [session, setSession] = useState<Session | null>(() => {
+    const persistedData = localStorage.getItem('mocha:session')
 
-  function signIn() {
-    console.log('sign-in')
+    if (persistedData) {
+      return JSON.parse(persistedData)
+    }
+
+    return null
+  })
+
+  function signIn(data: Session) {
+    setSession(data)
+
+    localStorage.setItem('mocha:session', JSON.stringify(data))
   }
 
   function signOut() {
-    console.log('sign-out')
+    setSession(null)
+    localStorage.removeItem('mocha:session')
   }
 
   return (

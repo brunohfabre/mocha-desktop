@@ -1,4 +1,4 @@
-import { Link, Navigate, Outlet } from 'react-router-dom'
+import { Navigate, Outlet } from 'react-router-dom'
 
 import LogoDark from '@/assets/logo-dark.png'
 import LogoLight from '@/assets/logo-light.png'
@@ -26,26 +26,6 @@ export function AuthLayout() {
       </header>
 
       <Outlet />
-
-      <footer className="p-4 text-center">
-        <p className="text-muted-foreground text-sm leading-relaxed w-full max-w-80 md:max-w-none">
-          By clicking sign in, you agree to our{' '}
-          <Link
-            to="/terms-of-service"
-            className="underline underline-offset-4 hover:text-primary"
-          >
-            Terms of Service
-          </Link>{' '}
-          and{' '}
-          <Link
-            to="/privacy-policy"
-            className="underline underline-offset-4 hover:text-primary"
-          >
-            Privacy Policy
-          </Link>
-          .
-        </p>
-      </footer>
     </div>
   )
 }
