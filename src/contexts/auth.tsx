@@ -44,6 +44,7 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
   function signOut() {
     setSession(null)
     localStorage.removeItem('mocha:session')
+    localStorage.removeItem('mocha:workspace')
   }
 
   return (
