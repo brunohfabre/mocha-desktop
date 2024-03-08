@@ -70,7 +70,11 @@ export function Workspaces() {
   }
 
   if (isPending) {
-    return <div>is loading</div>
+    return (
+      <div className="h-14 border-b flex items-center justify-center text-sm">
+        is loading...
+      </div>
+    )
   }
 
   return (
