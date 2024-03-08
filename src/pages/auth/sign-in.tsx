@@ -54,6 +54,7 @@ export function SignIn() {
           <h1 className="text-2xl font-semibold">Sign in</h1>
           <span className="text-sm text-muted-foreground">Welcome back 👋</span>
         </div>
+
         <div className="space-y-1">
           <Label>Email</Label>
           <Input placeholder="Email" {...register('email')} />
