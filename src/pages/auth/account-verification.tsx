@@ -13,12 +13,12 @@ import { api } from '@/lib/api'
 import { zodResolver } from '@hookform/resolvers/zod'
 
 const formSchema = z.object({
-  code: z.string().min(1),
+  code: z.string().regex(/[a-zA-Z]{5}-[a-zA-Z]{5}-[a-zA-Z]{5}/),
 })
 
 type FormData = z.infer<typeof formSchema>
 
-export function CodeVerification() {
+export function AccountVerification() {
   const location = useLocation()
 
   const state = location.state as { email: string } | undefined
@@ -56,9 +56,9 @@ export function CodeVerification() {
         onSubmit={handleSubmit(sendVerificationCode)}
       >
         <div>
-          <h1 className="text-2xl font-semibold">Code verify</h1>
+          <h1 className="text-2xl font-semibold">Verify account</h1>
           <span className="text-sm text-muted-foreground">
-            To sign in, enter code sent by email below.
+            To continue, enter the code sent by email below.
           </span>
         </div>
         <div className="space-y-1">

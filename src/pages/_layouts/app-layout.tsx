@@ -1,6 +1,7 @@
 import { Navigate, Outlet } from 'react-router-dom'
 
 import { Sidebar } from '@/components/sidebar'
+import { Tabs } from '@/components/tabs'
 import { useAuth } from '@/contexts/auth'
 
 export function AppLayout() {
@@ -11,10 +12,14 @@ export function AppLayout() {
   }
 
   return (
-    <div className="min-h-screen w-full flex">
+    <div className="min-h-screen w-full flex antialiased">
       <Sidebar />
 
-      <Outlet />
+      <div className="flex-1 flex flex-col">
+        <Tabs />
+
+        <Outlet />
+      </div>
     </div>
   )
 }

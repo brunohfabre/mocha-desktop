@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useLocation, useSearchParams } from 'react-router-dom'
 
-import { ChevronsUpDown, Check } from 'lucide-react'
+import { Check, ChevronsUpDown } from 'lucide-react'
 
 import {
   DropdownMenu,
@@ -11,6 +11,7 @@ import {
   DropdownMenuSeparator,
 } from '@/components/ui/dropdown-menu'
 import { api } from '@/lib/api'
+import { cn } from '@/lib/utils'
 import { useQuery } from '@tanstack/react-query'
 
 import { CreateWorkspaceModal } from './create-workspace-modal'
@@ -25,7 +26,7 @@ export function Workspaces() {
 
   const location = useLocation()
 
-  const isShort = location.pathname !== '/'
+  const expanded = location.pathname === '/'
 
   const [workspaceSelected, setWorkspaceSelected] =
     useState<WorkspaceType | null>(() => {
@@ -55,6 +56,10 @@ export function Workspaces() {
     }
   }, [data, isSuccess, workspaceSelected])
 
+  // function handleNavigateToWorkspaces() {
+  //   navigate('/workspaces')
+  // }
+
   function handleSelectWorkspace(workspace: WorkspaceType) {
     setWorkspaceSelected(workspace)
 
@@ -82,34 +87,43 @@ export function Workspaces() {
       <CreateWorkspaceModal selectWorkspace={handleSelectWorkspace} />
 
       <DropdownMenu>
-        <DropdownMenuTrigger asChild>
+        <DropdownMenuTrigger>
           <div
-            data-is-short={isShort}
-            className="h-14 flex px-3 items-center justify-between border-b cursor-pointer data-[is-short=true]:justify-center hover:bg-muted"
+            className={cn(
+              'flex items-center justify-between px-3 h-14 border-b hover:bg-muted',
+              !expanded && 'justify-center h-12',
+            )}
           >
-            <span
-              data-is-short={isShort}
-              className="text-sm data-[is-short=true]:hidden"
-            >
-              {workspaceSelected?.name}
-            </span>
+            {expanded && (
+              <span className="text-sm">{workspaceSelected?.name}</span>
+            )}
 
-            <ChevronsUpDown size={16} className="text-muted-foreground" />
+            <ChevronsUpDown className="w-4 h-4" />
           </div>
         </DropdownMenuTrigger>
 
-        <DropdownMenuContent className="w-60">
+        <DropdownMenuContent
+          className={cn('w-[248px]', !expanded && 'mt-1')}
+          side={expanded ? 'bottom' : 'right'}
+          align={expanded ? 'center' : 'start'}
+        >
           {data?.map((workspace) => (
             <DropdownMenuItem
               key={workspace.id}
+              className="flex justify-between items-center"
               onClick={() => handleSelectWorkspace(workspace)}
-              className="items-center justify-between"
             >
               {workspace.name}
-
-              {workspace.id === workspaceSelected?.id && <Check size={14} />}
+              {workspace.id === workspaceSelected?.id && (
+                <Check className="w-4 h-4" />
+              )}
             </DropdownMenuItem>
           ))}
+
+          {/* <DropdownMenuSeparator />
+          <DropdownMenuItem onClick={handleNavigateToWorkspaces}>
+            All workspaces
+          </DropdownMenuItem> */}
 
           <DropdownMenuSeparator />
 

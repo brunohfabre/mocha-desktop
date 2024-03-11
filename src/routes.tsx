@@ -2,10 +2,12 @@ import { createBrowserRouter } from 'react-router-dom'
 
 import { AppLayout } from './pages/_layouts/app-layout'
 import { AuthLayout } from './pages/_layouts/auth-layout'
-import { CodeVerification } from './pages/auth/code-verification'
+import { InternalLayout } from './pages/_layouts/internal-layout'
+import { AccountVerification } from './pages/auth/account-verification'
 import { SignIn } from './pages/auth/sign-in'
 import { Collections } from './pages/collections'
 import { Home } from './pages/home'
+import { Profile } from './pages/profile'
 
 export const router = createBrowserRouter([
   {
@@ -21,16 +23,15 @@ export const router = createBrowserRouter([
       },
     ],
   },
-  // {
-  //   element: <InternalLayout />,
-  //   path: '/',
-  //   children: [
-  //     {
-  //       path: '/create-workspace',
-  //       element: <CreateWorkspaceModal />,
-  //     },
-  //   ],
-  // },
+  {
+    element: <InternalLayout />,
+    children: [
+      {
+        path: '/profile',
+        element: <Profile />,
+      },
+    ],
+  },
   {
     path: '/',
     element: <AuthLayout />,
@@ -41,7 +42,7 @@ export const router = createBrowserRouter([
       },
       {
         path: '/code-verification',
-        element: <CodeVerification />,
+        element: <AccountVerification />,
       },
     ],
   },

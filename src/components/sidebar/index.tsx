@@ -1,92 +1,283 @@
-import { useLocation, useNavigate } from 'react-router-dom'
+import { useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 
-import LogoLight from '@/assets/logo-light.png'
+import { Box, ChevronDown, Moon, Settings, Sun } from 'lucide-react'
+
+import LogoDarkVector from '@/assets/logo-dark.png'
+import LogoLightVector from '@/assets/logo-light.png'
 import { useAuth } from '@/contexts/auth'
+import { cn } from '@/lib/utils'
 import { getShortName } from '@/utils/get-short-name'
 
+import { useTheme } from '../theme-provider'
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '../ui/alert-dialog'
 import { Avatar, AvatarFallback } from '../ui/avatar'
+import { Button } from '../ui/button'
 import {
   DropdownMenu,
-  DropdownMenuTrigger,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
 } from '../ui/dropdown-menu'
 import { Workspaces } from './workspaces'
 
 export function Sidebar() {
+  const navigate = useNavigate()
+  const { theme, setTheme } = useTheme()
+
   const { session, signOut } = useAuth()
 
-  const navigate = useNavigate()
-  const location = useLocation()
+  // const changeSelected = useTabsStore((state) => state.changeSelected)
 
-  const isShort = location.pathname !== '/'
+  const [signOutAlertDialogVisible, setSignOutAlertDialogVisible] =
+    useState(false)
+  const [expanded, setExpanded] = useState(true)
+
+  function handleChangeTheme() {
+    if (theme === 'light') {
+      setTheme('dark')
+    } else {
+      setTheme('light')
+    }
+  }
+
+  function handleNavigateToProfile() {
+    navigate('/profile')
+  }
+
+  function handleNavigateToCollections() {
+    setExpanded(false)
+    navigate('/collections')
+  }
+
+  function handleNavigateToWorkspaceSettings() {
+    navigate('/workspaces/123')
+  }
 
   function handleSignOut() {
     signOut()
   }
 
-  function handleNavigateToHome() {
-    navigate('/')
-  }
-
-  function handleNavigateToCollections() {
-    navigate('/collections')
-  }
-
   return (
-    <div
-      data-is-short={isShort}
-      className="w-64 border-r flex flex-col data-[is-short=true]:w-14"
-    >
-      <header className="h-14 flex border-b">
-        <button
-          type="button"
-          className="flex-1 px-3"
-          onClick={handleNavigateToHome}
-        >
-          <img src={LogoLight} alt="Mocha" className="w-9" />
-        </button>
-      </header>
-
-      <Workspaces />
+    <>
+      <AlertDialog
+        open={signOutAlertDialogVisible}
+        onOpenChange={setSignOutAlertDialogVisible}
+      >
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Sign out</AlertDialogTitle>
+            <AlertDialogDescription>
+              Really want to leaving mocha?
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction onClick={handleSignOut}>
+              Yes, Sign out
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
 
       <div
-        data-is-short={isShort}
-        className="flex-1 flex flex-col py-2 border-b group"
+        className={cn(
+          'w-64 border-r flex flex-col transition-all',
+          !expanded && 'w-14',
+        )}
       >
-        <button
-          type="button"
-          className="text-sm h-10 flex items-center px-3 group-data-[is-short=true]:justify-center hover:bg-muted"
-          onClick={handleNavigateToCollections}
+        <header
+          className={cn(
+            'border-b h-14 flex items-center justify-between transition-all',
+            expanded && 'pr-3',
+          )}
         >
-          {isShort ? 'C' : 'Collections'}
-        </button>
-      </div>
-
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <div
-            data-is-short={isShort}
-            className="flex px-3 items-center h-14 gap-2 cursor-pointer hover:bg-muted group data-[is-short=true]:p-0 data-[is-short=true]:justify-center"
+          <Link
+            to="/"
+            className="px-3 h-14 flex items-center"
+            onClick={() => setExpanded(true)}
           >
-            <Avatar>
-              {/* <AvatarImage src="https://github.com/shadcn.png" /> */}
-              <AvatarFallback>
-                {getShortName(session?.user.name ?? '')}
-              </AvatarFallback>
-            </Avatar>
+            <img
+              src={theme === 'light' ? LogoLightVector : LogoDarkVector}
+              alt="Mocha"
+              className="w-10"
+            />
+          </Link>
 
-            <div className="flex flex-col group-data-[is-short=true]:hidden">
-              <p className="text-sm font-semibold">{session?.user.name}</p>
-              <span className="text-xs">{session?.user.email}</span>
+          {expanded && (
+            <Button variant="outline" size="icon" onClick={handleChangeTheme}>
+              {theme === 'light' ? (
+                <Moon className="w-4 h-4" />
+              ) : (
+                <Sun className="w-4 h-4" />
+              )}
+            </Button>
+          )}
+        </header>
+
+        <Workspaces />
+
+        <div className="flex-1 flex flex-col">
+          <span
+            className={cn(
+              'px-3 pt-3 pb-0.5 text-xs text-zinc-400',
+              !expanded && 'self-center',
+            )}
+          >
+            {expanded ? 'General' : 'G'}
+          </span>
+
+          <button
+            type="button"
+            className={cn(
+              'flex items-center justify-start gap-1.5 px-3 h-10 text-sm hover:bg-muted',
+              !expanded && 'justify-center',
+            )}
+            onClick={handleNavigateToCollections}
+          >
+            <Box size={16} />
+            {expanded && 'Collections'}
+          </button>
+
+          {/* <button
+            type="button"
+            className={cn(
+              'flex items-center justify-start gap-1.5 px-3 h-10 text-sm enabled:hover:bg-muted disabled:opacity-50 disabled:cursor-not-allowed',
+              !expanded && 'justify-center',
+            )}
+            onClick={handleNavigateToNotes}
+            disabled
+          >
+            <StickyNote size={16} />
+            {expanded && 'Notes'}
+          </button>
+
+          <button
+            type="button"
+            className={cn(
+              'flex items-center justify-start gap-1.5 px-3 h-10 text-sm enabled:hover:bg-muted disabled:opacity-50 disabled:cursor-not-allowed',
+              !expanded && 'justify-center',
+            )}
+            disabled
+          >
+            <Database size={16} />
+            {expanded && 'Databases'}
+          </button>
+
+          <button
+            type="button"
+            className={cn(
+              'flex items-center justify-start gap-1.5 px-3 h-10 text-sm enabled:hover:bg-muted disabled:opacity-50 disabled:cursor-not-allowed',
+              !expanded && 'justify-center',
+            )}
+            disabled
+          >
+            <Lock size={16} />
+            {expanded && 'Passwords'}
+          </button> */}
+
+          <span
+            className={cn(
+              'px-3 pt-3 pb-0.5 text-xs text-zinc-400',
+              !expanded && 'self-center',
+            )}
+          >
+            {expanded ? 'Workspace' : 'W'}
+          </span>
+
+          <button
+            type="button"
+            className={cn(
+              'flex items-center justify-start gap-1.5 px-3 h-10 text-sm enabled:hover:bg-muted disabled:opacity-50 disabled:cursor-not-allowed',
+              !expanded && 'justify-center',
+            )}
+            onClick={handleNavigateToWorkspaceSettings}
+          >
+            <Settings size={16} />
+
+            {expanded && 'Workspace settings'}
+          </button>
+        </div>
+
+        {/* {expanded && (
+          <div className="border rounded-lg mb-3 mx-3 p-3 flex flex-col gap-4">
+            <div className="flex flex-col gap-1">
+              <strong className="text-base font-medium">
+                Premium account!
+              </strong>
+
+              <p className="text-sm text-gray-500">
+                Upgrade to premium account that allows more new features
+              </p>
             </div>
-          </div>
-        </DropdownMenuTrigger>
 
-        <DropdownMenuContent className="w-60">
-          <DropdownMenuItem onClick={handleSignOut}>Sign out</DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
-    </div>
+            <Button type="button" onClick={() => navigate('/upgrade')}>
+              Upgrade
+            </Button>
+          </div>
+        )} */}
+
+        <DropdownMenu>
+          <DropdownMenuTrigger>
+            <div
+              className={cn(
+                'border-t h-14 flex items-center gap-2 hover:bg-muted',
+                expanded && 'px-3',
+                !expanded && 'justify-center h-12',
+              )}
+            >
+              <Avatar className={cn(!expanded && 'w-9 h-9')}>
+                {/* <AvatarImage src="https://github.com/shadcn.png" /> */}
+                <AvatarFallback className="text-sm">
+                  {getShortName(session?.user.name ?? '')}
+                </AvatarFallback>
+              </Avatar>
+
+              {expanded && (
+                <>
+                  <div className="flex-1 flex flex-col">
+                    <span className="text-sm font-semibold text-left">
+                      {session?.user.name}
+                    </span>
+                    <span className="text-xs text-left">
+                      {session?.user.email}
+                    </span>
+                  </div>
+
+                  <ChevronDown className="w-4 h-4" />
+                </>
+              )}
+            </div>
+          </DropdownMenuTrigger>
+
+          <DropdownMenuContent
+            className={cn('w-[248px]', !expanded && 'mb-1')}
+            side={expanded ? 'top' : 'right'}
+          >
+            <DropdownMenuItem onClick={handleNavigateToProfile}>
+              Profile
+            </DropdownMenuItem>
+
+            <DropdownMenuSeparator />
+
+            <DropdownMenuItem
+              onClick={() => setSignOutAlertDialogVisible(true)}
+            >
+              Sign out
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </div>
+    </>
   )
 }
