@@ -10,16 +10,6 @@ import { cn } from '@/lib/utils'
 import { getShortName } from '@/utils/get-short-name'
 
 import { useTheme } from '../theme-provider'
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from '../ui/alert-dialog'
 import { Avatar, AvatarFallback } from '../ui/avatar'
 import { Button } from '../ui/button'
 import {
@@ -37,10 +27,6 @@ export function Sidebar() {
 
   const { session, signOut } = useAuth()
 
-  // const changeSelected = useTabsStore((state) => state.changeSelected)
-
-  const [signOutAlertDialogVisible, setSignOutAlertDialogVisible] =
-    useState(false)
   const [expanded, setExpanded] = useState(true)
 
   function handleChangeTheme() {
@@ -69,87 +55,66 @@ export function Sidebar() {
   }
 
   return (
-    <>
-      <AlertDialog
-        open={signOutAlertDialogVisible}
-        onOpenChange={setSignOutAlertDialogVisible}
-      >
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>Sign out</AlertDialogTitle>
-            <AlertDialogDescription>
-              Really want to leaving mocha?
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction onClick={handleSignOut}>
-              Yes, Sign out
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
-
-      <div
+    <div
+      className={cn(
+        'w-64 border-r flex flex-col transition-all',
+        !expanded && 'w-14',
+      )}
+    >
+      <header
         className={cn(
-          'w-64 border-r flex flex-col transition-all',
-          !expanded && 'w-14',
+          'border-b h-14 flex items-center justify-between transition-all',
+          expanded && 'pr-3',
         )}
       >
-        <header
+        <Link
+          to="/"
+          className="px-3 h-14 flex items-center"
+          onClick={() => setExpanded(true)}
+        >
+          <img
+            src={theme === 'light' ? LogoLightVector : LogoDarkVector}
+            alt="Mocha"
+            className="w-10"
+          />
+        </Link>
+
+        {expanded && (
+          <Button variant="outline" size="icon" onClick={handleChangeTheme}>
+            {theme === 'light' ? (
+              <Moon className="w-4 h-4" />
+            ) : (
+              <Sun className="w-4 h-4" />
+            )}
+          </Button>
+        )}
+      </header>
+
+      <Workspaces />
+
+      <div className="flex-1 flex flex-col">
+        <span
           className={cn(
-            'border-b h-14 flex items-center justify-between transition-all',
-            expanded && 'pr-3',
+            'px-3 pt-3 pb-0.5 text-xs text-zinc-400',
+            !expanded && 'self-center',
           )}
         >
-          <Link
-            to="/"
-            className="px-3 h-14 flex items-center"
-            onClick={() => setExpanded(true)}
-          >
-            <img
-              src={theme === 'light' ? LogoLightVector : LogoDarkVector}
-              alt="Mocha"
-              className="w-10"
-            />
-          </Link>
+          {expanded ? 'General' : 'G'}
+        </span>
 
-          {expanded && (
-            <Button variant="outline" size="icon" onClick={handleChangeTheme}>
-              {theme === 'light' ? (
-                <Moon className="w-4 h-4" />
-              ) : (
-                <Sun className="w-4 h-4" />
-              )}
-            </Button>
+        <button
+          type="button"
+          className={cn(
+            'flex items-center justify-start gap-1.5 px-3 h-10 text-sm hover:bg-muted',
+            !expanded && 'justify-center',
           )}
-        </header>
+          onClick={handleNavigateToCollections}
+        >
+          <Box size={16} />
+          {expanded && 'Collections'}
+        </button>
 
-        <Workspaces />
-
-        <div className="flex-1 flex flex-col">
-          <span
-            className={cn(
-              'px-3 pt-3 pb-0.5 text-xs text-zinc-400',
-              !expanded && 'self-center',
-            )}
-          >
-            {expanded ? 'General' : 'G'}
-          </span>
-
-          <button
-            type="button"
-            className={cn(
-              'flex items-center justify-start gap-1.5 px-3 h-10 text-sm hover:bg-muted',
-              !expanded && 'justify-center',
-            )}
-            onClick={handleNavigateToCollections}
-          >
-            <Box size={16} />
-            {expanded && 'Collections'}
-          </button>
-
-          {/* <button
+        {/* <button
             type="button"
             className={cn(
               'flex items-center justify-start gap-1.5 px-3 h-10 text-sm enabled:hover:bg-muted disabled:opacity-50 disabled:cursor-not-allowed',
@@ -186,30 +151,30 @@ export function Sidebar() {
             {expanded && 'Passwords'}
           </button> */}
 
-          <span
-            className={cn(
-              'px-3 pt-3 pb-0.5 text-xs text-zinc-400',
-              !expanded && 'self-center',
-            )}
-          >
-            {expanded ? 'Workspace' : 'W'}
-          </span>
+        <span
+          className={cn(
+            'px-3 pt-3 pb-0.5 text-xs text-zinc-400',
+            !expanded && 'self-center',
+          )}
+        >
+          {expanded ? 'Workspace' : 'W'}
+        </span>
 
-          <button
-            type="button"
-            className={cn(
-              'flex items-center justify-start gap-1.5 px-3 h-10 text-sm enabled:hover:bg-muted disabled:opacity-50 disabled:cursor-not-allowed',
-              !expanded && 'justify-center',
-            )}
-            onClick={handleNavigateToWorkspaceSettings}
-          >
-            <Settings size={16} />
+        <button
+          type="button"
+          className={cn(
+            'flex items-center justify-start gap-1.5 px-3 h-10 text-sm enabled:hover:bg-muted disabled:opacity-50 disabled:cursor-not-allowed',
+            !expanded && 'justify-center',
+          )}
+          onClick={handleNavigateToWorkspaceSettings}
+        >
+          <Settings size={16} />
 
-            {expanded && 'Workspace settings'}
-          </button>
-        </div>
+          {expanded && 'Workspace settings'}
+        </button>
+      </div>
 
-        {/* {expanded && (
+      {/* {expanded && (
           <div className="border rounded-lg mb-3 mx-3 p-3 flex flex-col gap-4">
             <div className="flex flex-col gap-1">
               <strong className="text-base font-medium">
@@ -227,57 +192,52 @@ export function Sidebar() {
           </div>
         )} */}
 
-        <DropdownMenu>
-          <DropdownMenuTrigger>
-            <div
-              className={cn(
-                'border-t h-14 flex items-center gap-2 hover:bg-muted',
-                expanded && 'px-3',
-                !expanded && 'justify-center h-12',
-              )}
-            >
-              <Avatar className={cn(!expanded && 'w-9 h-9')}>
-                {/* <AvatarImage src="https://github.com/shadcn.png" /> */}
-                <AvatarFallback className="text-sm">
-                  {getShortName(session?.user.name ?? '')}
-                </AvatarFallback>
-              </Avatar>
-
-              {expanded && (
-                <>
-                  <div className="flex-1 flex flex-col">
-                    <span className="text-sm font-semibold text-left">
-                      {session?.user.name}
-                    </span>
-                    <span className="text-xs text-left">
-                      {session?.user.email}
-                    </span>
-                  </div>
-
-                  <ChevronDown className="w-4 h-4" />
-                </>
-              )}
-            </div>
-          </DropdownMenuTrigger>
-
-          <DropdownMenuContent
-            className={cn('w-[248px]', !expanded && 'mb-1')}
-            side={expanded ? 'top' : 'right'}
+      <DropdownMenu>
+        <DropdownMenuTrigger>
+          <div
+            className={cn(
+              'border-t h-14 flex items-center gap-2 hover:bg-muted',
+              expanded && 'px-3',
+              !expanded && 'justify-center h-12',
+            )}
           >
-            <DropdownMenuItem onClick={handleNavigateToProfile}>
-              Profile
-            </DropdownMenuItem>
+            <Avatar className={cn(!expanded && 'w-9 h-9')}>
+              {/* <AvatarImage src="https://github.com/shadcn.png" /> */}
+              <AvatarFallback className="text-sm">
+                {getShortName(session?.user.name ?? '')}
+              </AvatarFallback>
+            </Avatar>
 
-            <DropdownMenuSeparator />
+            {expanded && (
+              <>
+                <div className="flex-1 flex flex-col">
+                  <span className="text-sm font-semibold text-left">
+                    {session?.user.name}
+                  </span>
+                  <span className="text-xs text-left">
+                    {session?.user.email}
+                  </span>
+                </div>
 
-            <DropdownMenuItem
-              onClick={() => setSignOutAlertDialogVisible(true)}
-            >
-              Sign out
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      </div>
-    </>
+                <ChevronDown className="w-4 h-4" />
+              </>
+            )}
+          </div>
+        </DropdownMenuTrigger>
+
+        <DropdownMenuContent
+          className={cn('w-[248px]', !expanded && 'mb-1')}
+          side={expanded ? 'top' : 'right'}
+        >
+          <DropdownMenuItem onClick={handleNavigateToProfile}>
+            Profile
+          </DropdownMenuItem>
+
+          <DropdownMenuSeparator />
+
+          <DropdownMenuItem onClick={handleSignOut}>Sign out</DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+    </div>
   )
 }

@@ -1,16 +1,18 @@
 import { ReactNode, useEffect, useRef, useState } from 'react'
 
-import { useTheme } from 'next-themes'
-
 import LogoDark from '@/assets/logo-dark.png'
 import LogoLight from '@/assets/logo-light.png'
+import { useTheme } from '@/components/theme-provider'
 import { relaunch } from '@tauri-apps/api/process'
 import { checkUpdate, installUpdate } from '@tauri-apps/api/updater'
+
+import { useAuth } from './auth'
 
 export function UpdateProvider({ children }: { children: ReactNode }) {
   const firstRenderRef = useRef(true)
 
-  const { resolvedTheme } = useTheme()
+  const { verifySession } = useAuth()
+  const { theme } = useTheme()
 
   const [isLoading, setIsLoading] = useState(true)
 
@@ -29,19 +31,25 @@ export function UpdateProvider({ children }: { children: ReactNode }) {
       }
     }
 
+    async function verify() {
+      await verifySession()
+
+      await check()
+    }
+
     if (!firstRenderRef.current) {
       return
     }
 
     firstRenderRef.current = false
 
-    check()
-  }, [])
+    verify()
+  }, [verifySession])
 
   if (isLoading) {
     return (
       <div className="min-h-screen w-full flex items-center justify-center">
-        {resolvedTheme === 'light' ? (
+        {theme === 'light' ? (
           <img src={LogoLight} alt="Mocha" className="w-16 animate-bounce" />
         ) : (
           <img src={LogoDark} alt="Mocha" className="w-16 animate-bounce" />

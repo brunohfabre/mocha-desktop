@@ -9,8 +9,8 @@ interface AppProviderProps {
 
 export function AppProvider({ children }: AppProviderProps) {
   return (
-    <UpdateProvider>
-      <AuthContextProvider>{children}</AuthContextProvider>
-    </UpdateProvider>
+    <AuthContextProvider>
+      <UpdateProvider>{children}</UpdateProvider>
+    </AuthContextProvider>
   )
 }

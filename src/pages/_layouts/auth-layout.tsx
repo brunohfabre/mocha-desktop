@@ -6,23 +6,33 @@ import { useTheme } from '@/components/theme-provider'
 import { useAuth } from '@/contexts/auth'
 
 export function AuthLayout() {
-  const { theme } = useTheme()
+  const { theme, setTheme } = useTheme()
   const { session } = useAuth()
-
-  console.log(theme)
 
   if (session) {
     return <Navigate to="/" replace />
   }
 
+  function handleChangeTheme() {
+    if (theme === 'system' || theme === 'light') {
+      setTheme('dark')
+
+      return
+    }
+
+    setTheme('light')
+  }
+
   return (
     <div className="min-h-screen w-full flex flex-col">
       <header className="p-4 max-w-7xl w-full mx-auto">
-        <img
-          src={theme === 'light' ? LogoLight : LogoDark}
-          alt="Mocha"
-          className="h-7"
-        />
+        <button type="button" onClick={handleChangeTheme}>
+          <img
+            src={theme === 'light' ? LogoLight : LogoDark}
+            alt="Mocha"
+            className="h-7"
+          />
+        </button>
       </header>
 
       <Outlet />

@@ -1,5 +1,7 @@
 import { ReactNode, createContext, useContext, useState } from 'react'
 
+import { api } from '@/lib/api'
+
 type User = {
   id: string
   name: string
@@ -14,6 +16,7 @@ type Session = {
 interface AuthContextData {
   session: Session | null
 
+  verifySession: () => void
   signIn: (data: Session) => void
   signOut: () => void
 }
@@ -35,6 +38,12 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
     return null
   })
 
+  async function verifySession() {
+    const response = await api.get('/me')
+
+    console.log(response)
+  }
+
   function signIn(data: Session) {
     setSession(data)
 
@@ -48,7 +57,7 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
   }
 
   return (
-    <AuthContext.Provider value={{ session, signIn, signOut }}>
+    <AuthContext.Provider value={{ session, verifySession, signIn, signOut }}>
       {children}
     </AuthContext.Provider>
   )
