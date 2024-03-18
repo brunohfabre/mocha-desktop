@@ -105,7 +105,7 @@ export function Sidebar() {
         <button
           type="button"
           className={cn(
-            'flex items-center justify-start gap-1.5 px-3 h-10 text-sm hover:bg-muted',
+            'flex items-center justify-start gap-1.5 px-3 h-10 text-sm text-gray-950 hover:bg-muted',
             !expanded && 'justify-center',
           )}
           onClick={handleNavigateToCollections}
@@ -163,7 +163,7 @@ export function Sidebar() {
         <button
           type="button"
           className={cn(
-            'flex items-center justify-start gap-1.5 px-3 h-10 text-sm enabled:hover:bg-muted disabled:opacity-50 disabled:cursor-not-allowed',
+            'flex items-center justify-start gap-1.5 px-3 h-10 text-sm text-gray-950 enabled:hover:bg-muted disabled:opacity-50 disabled:cursor-not-allowed',
             !expanded && 'justify-center',
           )}
           onClick={handleNavigateToWorkspaceSettings}
