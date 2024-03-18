@@ -1,17 +1,78 @@
+import { useState } from 'react'
+import { useForm } from 'react-hook-form'
+
+import { Loader2 } from 'lucide-react'
+import { z } from 'zod'
+
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { api } from '@/lib/api'
+import { useAuthStore } from '@/stores/auth'
+import { zodResolver } from '@hookform/resolvers/zod'
+
+const formSchema = z.object({
+  name: z.string().min(1),
+})
+
+type FormData = z.infer<typeof formSchema>
+
 export function Profile() {
+  const token = useAuthStore((state) => state.token)
+  const user = useAuthStore((state) => state.user)
+  const setCredentials = useAuthStore((state) => state.setCredentials)
+
+  const { handleSubmit, formState, register } = useForm<FormData>({
+    resolver: zodResolver(formSchema),
+    defaultValues: user ?? {},
+  })
+
+  const [isLoading, setIsLoading] = useState(false)
+
+  async function updateUser({ name }: FormData) {
+    try {
+      setIsLoading(true)
+
+      const response = await api.put('/users', {
+        name,
+      })
+
+      setCredentials({
+        token,
+        user: response.data.user,
+      })
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
   return (
-    <div className="max-w-3xl mx-auto flex flex-col py-8 px-4 gap-8">
+    <div className="max-w-3xl w-full mx-auto flex flex-col py-8 px-4 gap-8">
       <div className="flex flex-col gap-2">
         <strong className="text-lg font-medium">Account details</strong>
 
-        <div className="border rounded-lg p-4">
-          <p>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Autem, nam
-            quos. Labore, architecto ab cumque ullam soluta incidunt corporis
-            veritatis nobis saepe doloremque neque fugiat tempora dolorum
-            pariatur minima aliquid.
-          </p>
-        </div>
+        <form
+          className="border rounded-lg flex flex-col p-4 gap-4"
+          onSubmit={handleSubmit(updateUser)}
+        >
+          <div className="space-y-1">
+            <Label>Name</Label>
+            <Input placeholder="Name" {...register('name')} />
+            <span className="text-sm text-red-500">
+              {formState.errors.name?.message}
+            </span>
+          </div>
+
+          <div className="flex justify-end">
+            <Button>
+              {isLoading ? (
+                <Loader2 size={16} className="animate-spin" />
+              ) : (
+                'Save'
+              )}
+            </Button>
+          </div>
+        </form>
       </div>
 
       {/* <div className="flex flex-col gap-2">

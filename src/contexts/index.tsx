@@ -1,6 +1,5 @@
 import { ReactNode } from 'react'
 
-import { AuthContextProvider } from './auth'
 import { UpdateProvider } from './update'
 
 interface AppProviderProps {
@@ -8,9 +7,5 @@ interface AppProviderProps {
 }
 
 export function AppProvider({ children }: AppProviderProps) {
-  return (
-    <AuthContextProvider>
-      <UpdateProvider>{children}</UpdateProvider>
-    </AuthContextProvider>
-  )
+  return <UpdateProvider>{children}</UpdateProvider>
 }

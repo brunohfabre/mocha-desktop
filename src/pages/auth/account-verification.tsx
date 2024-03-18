@@ -8,8 +8,8 @@ import { z } from 'zod'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { useAuth } from '@/contexts/auth'
 import { api } from '@/lib/api'
+import { useAuthStore } from '@/stores/auth'
 import { zodResolver } from '@hookform/resolvers/zod'
 
 const formSchema = z.object({
@@ -23,7 +23,7 @@ export function AccountVerification() {
 
   const state = location.state as { email: string } | undefined
 
-  const { signIn } = useAuth()
+  const setCredentials = useAuthStore((state) => state.setCredentials)
 
   const { handleSubmit, register, formState } = useForm<FormData>({
     resolver: zodResolver(formSchema),
@@ -39,7 +39,7 @@ export function AccountVerification() {
         code,
       })
 
-      signIn(response.data)
+      setCredentials(response.data)
     } finally {
       setIsLoading(false)
     }

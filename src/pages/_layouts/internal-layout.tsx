@@ -11,16 +11,18 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import { useAuth } from '@/contexts/auth'
+import { useAuthStore } from '@/stores/auth'
 import { getShortName } from '@/utils/get-short-name'
 
 export function InternalLayout() {
   const navigate = useNavigate()
   const location = useLocation()
 
-  const { session, signOut } = useAuth()
+  const token = useAuthStore((state) => state.token)
+  const user = useAuthStore((state) => state.user)
+  const clearCredentials = useAuthStore((state) => state.clearCredentials)
 
-  if (!session) {
+  if (!token) {
     return <Navigate to="/sign-in" replace />
   }
 
@@ -33,7 +35,7 @@ export function InternalLayout() {
   }
 
   function handleSignOut() {
-    signOut()
+    clearCredentials()
   }
 
   const isProfileRoute = location.pathname === '/profile'
@@ -50,7 +52,7 @@ export function InternalLayout() {
             <Avatar>
               {/* <AvatarImage src="https://github.com/shadcn.png" /> */}
               <AvatarFallback className="text-sm">
-                {getShortName(session?.user.name ?? '')}
+                {getShortName(user?.name ?? '')}
               </AvatarFallback>
             </Avatar>
           </DropdownMenuTrigger>

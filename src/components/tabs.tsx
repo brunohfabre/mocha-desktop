@@ -1,24 +1,21 @@
-import { useState } from 'react'
-
 import { ChevronLeft, ChevronRight, X } from 'lucide-react'
 
 import { cn } from '@/lib/utils'
+import { useTabs } from '@/stores/tabs'
 
 import { Button } from './ui/button'
 import { ScrollArea, ScrollBar } from './ui/scroll-area'
 
-const tabs = [
-  {
-    id: crypto.randomUUID(),
-    label: 'tab-label',
-  },
-]
-
 export function Tabs() {
-  const [tabSelected, setTabSelected] = useState('')
+  const tabs = useTabs((state) => state.tabs)
+  const tabSelected = useTabs((state) => state.tabSelected)
+  const removeTab = useTabs((state) => state.removeTab)
+  const selectTab = useTabs((state) => state.selectTab)
 
   function handleRemoveTab(id: string) {
     console.log(id)
+
+    removeTab(id)
   }
 
   return (
@@ -44,7 +41,7 @@ export function Tabs() {
                 'gap-2 pl-3 pr-1.5',
                 tab.id !== tabSelected && 'opacity-50',
               )}
-              onClick={() => setTabSelected(tab.id)}
+              onClick={() => selectTab(tab.id)}
             >
               {tab.label}
 

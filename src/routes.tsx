@@ -7,6 +7,7 @@ import { AccountVerification } from './pages/auth/account-verification'
 import { SignIn } from './pages/auth/sign-in'
 import { Collections } from './pages/collections'
 import { Home } from './pages/home'
+import { Notifications } from './pages/notifications'
 import { Profile } from './pages/profile'
 
 export const router = createBrowserRouter([
@@ -29,6 +30,10 @@ export const router = createBrowserRouter([
       {
         path: '/profile',
         element: <Profile />,
+      },
+      {
+        path: '/notifications',
+        element: <Notifications />,
       },
     ],
   },

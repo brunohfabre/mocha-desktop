@@ -1,12 +1,12 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 
-import { Box, ChevronDown, Moon, Settings, Sun } from 'lucide-react'
+import { Box, ChevronDown, Moon, Settings, Sun, Bell } from 'lucide-react'
 
 import LogoDarkVector from '@/assets/logo-dark.png'
 import LogoLightVector from '@/assets/logo-light.png'
-import { useAuth } from '@/contexts/auth'
 import { cn } from '@/lib/utils'
+import { useAuthStore } from '@/stores/auth'
 import { getShortName } from '@/utils/get-short-name'
 
 import { useTheme } from '../theme-provider'
@@ -25,7 +25,8 @@ export function Sidebar() {
   const navigate = useNavigate()
   const { theme, setTheme } = useTheme()
 
-  const { session, signOut } = useAuth()
+  const user = useAuthStore((state) => state.user)
+  const clearCredentials = useAuthStore((state) => state.clearCredentials)
 
   const [expanded, setExpanded] = useState(true)
 
@@ -50,20 +51,19 @@ export function Sidebar() {
     navigate('/workspaces/123')
   }
 
+  function handleNavigateToNotifications() {
+    navigate('/notifications')
+  }
+
   function handleSignOut() {
-    signOut()
+    clearCredentials()
   }
 
   return (
-    <div
-      className={cn(
-        'w-64 border-r flex flex-col transition-all',
-        !expanded && 'w-14',
-      )}
-    >
+    <div className={cn('w-64 border-r flex flex-col', !expanded && 'w-14')}>
       <header
         className={cn(
-          'border-b h-14 flex items-center justify-between transition-all',
+          'border-b h-14 flex items-center justify-between',
           expanded && 'pr-3',
         )}
       >
@@ -192,6 +192,19 @@ export function Sidebar() {
           </div>
         )} */}
 
+      <button
+        type="button"
+        className={cn(
+          'flex items-center justify-start gap-1.5 px-3 h-10 text-sm mb-3 enabled:hover:bg-muted disabled:opacity-50 disabled:cursor-not-allowed',
+          !expanded && 'justify-center',
+        )}
+        onClick={handleNavigateToNotifications}
+      >
+        <Bell size={16} />
+
+        {expanded && 'Notifications'}
+      </button>
+
       <DropdownMenu>
         <DropdownMenuTrigger>
           <div
@@ -204,7 +217,7 @@ export function Sidebar() {
             <Avatar className={cn(!expanded && 'w-9 h-9')}>
               {/* <AvatarImage src="https://github.com/shadcn.png" /> */}
               <AvatarFallback className="text-sm">
-                {getShortName(session?.user.name ?? '')}
+                {getShortName(user?.name ?? '')}
               </AvatarFallback>
             </Avatar>
 
@@ -212,11 +225,9 @@ export function Sidebar() {
               <>
                 <div className="flex-1 flex flex-col">
                   <span className="text-sm font-semibold text-left">
-                    {session?.user.name}
+                    {user?.name}
                   </span>
-                  <span className="text-xs text-left">
-                    {session?.user.email}
-                  </span>
+                  <span className="text-xs text-left">{user?.email}</span>
                 </div>
 
                 <ChevronDown className="w-4 h-4" />

@@ -3,13 +3,14 @@ import { Navigate, Outlet } from 'react-router-dom'
 import LogoDark from '@/assets/logo-dark.png'
 import LogoLight from '@/assets/logo-light.png'
 import { useTheme } from '@/components/theme-provider'
-import { useAuth } from '@/contexts/auth'
+import { useAuthStore } from '@/stores/auth'
 
 export function AuthLayout() {
   const { theme, setTheme } = useTheme()
-  const { session } = useAuth()
 
-  if (session) {
+  const token = useAuthStore((state) => state.token)
+
+  if (token) {
     return <Navigate to="/" replace />
   }
 
