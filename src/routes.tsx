@@ -9,6 +9,7 @@ import { Collections } from './pages/collections'
 import { Home } from './pages/home'
 import { Notifications } from './pages/notifications'
 import { Profile } from './pages/profile'
+import { Workspace } from './pages/workspace'
 
 export const router = createBrowserRouter([
   {
@@ -30,6 +31,10 @@ export const router = createBrowserRouter([
       {
         path: '/profile',
         element: <Profile />,
+      },
+      {
+        path: '/workspaces/:id',
+        element: <Workspace />,
       },
       {
         path: '/notifications',

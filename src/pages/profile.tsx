@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 
 import { Loader2 } from 'lucide-react'
+import { toast } from 'sonner'
 import { z } from 'zod'
 
 import { Button } from '@/components/ui/button'
@@ -41,6 +42,8 @@ export function Profile() {
         token,
         user: response.data.user,
       })
+
+      toast.success('Profile updated successfully')
     } finally {
       setIsLoading(false)
     }
