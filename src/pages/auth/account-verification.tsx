@@ -1,8 +1,8 @@
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { Link, Navigate, useLocation } from 'react-router-dom'
+import { Link, Navigate, useLocation, useNavigate } from 'react-router-dom'
 
-import { Loader2 } from 'lucide-react'
+import { ArrowLeft, Loader2 } from 'lucide-react'
 import { z } from 'zod'
 
 import { Button } from '@/components/ui/button'
@@ -19,6 +19,7 @@ const formSchema = z.object({
 type FormData = z.infer<typeof formSchema>
 
 export function AccountVerification() {
+  const navigate = useNavigate()
   const location = useLocation()
 
   const state = location.state as { email: string } | undefined
@@ -49,6 +50,10 @@ export function AccountVerification() {
     return <Navigate to="/sign-in" replace />
   }
 
+  function handleGoBack() {
+    navigate(-1)
+  }
+
   return (
     <div className="flex-1 flex flex-col items-center">
       <form
@@ -69,13 +74,25 @@ export function AccountVerification() {
           </span>
         </div>
 
-        <Button className="w-full" disabled={isLoading}>
-          {isLoading ? (
-            <Loader2 size={16} className="animate-spin" />
-          ) : (
-            'Verify code'
-          )}
-        </Button>
+        <div className="gap-2 flex flex-col">
+          <Button className="w-full" disabled={isLoading}>
+            {isLoading ? (
+              <Loader2 size={16} className="animate-spin" />
+            ) : (
+              'Verify code'
+            )}
+          </Button>
+
+          <Button
+            type="button"
+            variant="link"
+            className="mt-4"
+            onClick={handleGoBack}
+          >
+            <ArrowLeft className="w-4 h-4 mr-2" />
+            Go back
+          </Button>
+        </div>
       </form>
 
       <footer className="p-4 text-center">

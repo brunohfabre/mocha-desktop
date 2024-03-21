@@ -1,12 +1,13 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 
-import { Box, ChevronDown, Moon, Settings, Sun, Bell } from 'lucide-react'
+import { Box, ChevronDown, Moon, Settings, Sun } from 'lucide-react'
 
 import LogoDarkVector from '@/assets/logo-dark.png'
 import LogoLightVector from '@/assets/logo-light.png'
 import { cn } from '@/lib/utils'
 import { useAuthStore } from '@/stores/auth'
+import { useWorkspaceStore } from '@/stores/workspace'
 import { getShortName } from '@/utils/get-short-name'
 
 import { useTheme } from '../theme-provider'
@@ -28,6 +29,10 @@ export function Sidebar() {
   const user = useAuthStore((state) => state.user)
   const clearCredentials = useAuthStore((state) => state.clearCredentials)
 
+  const workspaceSelected = useWorkspaceStore(
+    (state) => state.workspaceSelected,
+  )
+
   const [expanded, setExpanded] = useState(true)
 
   function handleChangeTheme() {
@@ -48,12 +53,12 @@ export function Sidebar() {
   }
 
   function handleNavigateToWorkspaceSettings() {
-    navigate('/workspaces/123')
+    navigate(`/workspaces/${workspaceSelected}`)
   }
 
-  function handleNavigateToNotifications() {
-    navigate('/notifications')
-  }
+  // function handleNavigateToNotifications() {
+  //   navigate('/notifications')
+  // }
 
   function handleSignOut() {
     clearCredentials()
@@ -170,7 +175,7 @@ export function Sidebar() {
         >
           <Settings size={16} />
 
-          {expanded && 'Workspace settings'}
+          {expanded && 'Settings'}
         </button>
       </div>
 
@@ -192,7 +197,7 @@ export function Sidebar() {
           </div>
         )} */}
 
-      <button
+      {/* <button
         type="button"
         className={cn(
           'flex items-center justify-start gap-1.5 px-3 h-10 text-sm mb-3 enabled:hover:bg-muted disabled:opacity-50 disabled:cursor-not-allowed',
@@ -203,7 +208,7 @@ export function Sidebar() {
         <Bell size={16} />
 
         {expanded && 'Notifications'}
-      </button>
+      </button> */}
 
       <DropdownMenu>
         <DropdownMenuTrigger>

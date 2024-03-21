@@ -43,19 +43,19 @@ export function Profile() {
         user: response.data.user,
       })
 
-      toast.success('Profile updated successfully')
+      toast.success('Profile updated successfully.')
     } finally {
       setIsLoading(false)
     }
   }
 
   return (
-    <div className="max-w-3xl w-full mx-auto flex flex-col py-8 px-4 gap-8">
+    <div className="max-w-3xl w-full mx-auto px-4 py-8 flex flex-col gap-8">
       <div className="flex flex-col gap-2">
-        <strong className="text-lg font-medium">Account details</strong>
+        <strong className="text-lg font-semibold">About you</strong>
 
         <form
-          className="border rounded-lg flex flex-col p-4 gap-4"
+          className="border rounded-lg flex flex-col p-4 gap-8"
           onSubmit={handleSubmit(updateUser)}
         >
           <div className="space-y-1">
@@ -67,33 +67,32 @@ export function Profile() {
           </div>
 
           <div className="flex justify-end">
-            <Button>
-              {isLoading ? (
-                <Loader2 size={16} className="animate-spin" />
-              ) : (
-                'Save'
-              )}
+            <Button disabled={isLoading}>
+              {isLoading && <Loader2 className="w-4 h-4 animate-spin mr-2" />}
+              Save
             </Button>
           </div>
         </form>
       </div>
 
-      {/* <div className="flex flex-col gap-2">
-        <strong className="text-lg font-medium">Danger zone</strong>
+      <div className="flex flex-col gap-2">
+        <strong className="text-lg font-semibold">Danger zone</strong>
 
-        <div className="border rounded-lg p-4 flex flex-col">
+        <div className="border rounded-lg flex flex-col p-4 gap-8">
           <div className="flex justify-between items-center">
-            <div className="flex flex-col">
-              <p className="text-base font-semibold">Delete account</p>
-              <p className="text-sm text-gray-500">
-                This action will be remove all content vinculated your account
-                like collections.
+            <div>
+              <p className="text-base font-medium">Delete your account?</p>
+              <p className="text-sm text-muted-foreground">
+                This action delete all data of your account.
               </p>
             </div>
-            <Button variant="destructive">Delete account</Button>
+
+            <Button type="button" variant="destructive" disabled>
+              Delete account
+            </Button>
           </div>
         </div>
-      </div> */}
+      </div>
     </div>
   )
 }

@@ -3,6 +3,7 @@ import { useForm } from 'react-hook-form'
 import { useSearchParams } from 'react-router-dom'
 
 import { Loader2 } from 'lucide-react'
+import { toast } from 'sonner'
 import { z } from 'zod'
 
 import { Button } from '@/components/ui/button'
@@ -28,7 +29,7 @@ const formSchema = z.object({
 type FormData = z.infer<typeof formSchema>
 
 interface CreateWorkspaceModalProps {
-  selectWorkspace: (data: WorkspaceType) => void
+  selectWorkspace: (workspaceId: string) => void
 }
 
 export function CreateWorkspaceModal({
@@ -69,9 +70,11 @@ export function CreateWorkspaceModal({
         response.data.workspace,
       ])
 
-      selectWorkspace(response.data.workspace)
+      selectWorkspace(response.data.workspace.id)
 
       handleCloseModal()
+
+      toast.success('Workspace created successfully.')
     } finally {
       setIsLoading(false)
     }

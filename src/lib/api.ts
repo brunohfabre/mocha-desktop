@@ -3,6 +3,7 @@ import { toast } from 'sonner'
 
 import { env } from '@/env'
 import { useAuthStore } from '@/stores/auth'
+import { useWorkspaceStore } from '@/stores/workspace'
 
 export const api = axios.create({
   baseURL: env.VITE_APP_API_URL,
@@ -16,12 +17,10 @@ api.interceptors.request.use(
       config.headers.Authorization = `Bearer ${token}`
     }
 
-    const workspace = localStorage.getItem('mocha:workspace')
+    const workspace = useWorkspaceStore.getState().workspaceSelected
 
     if (workspace) {
-      const { id } = JSON.parse(workspace)
-
-      config.headers['workspace-id'] = id
+      config.headers['workspace-id'] = workspace
     }
 
     return config
@@ -36,17 +35,19 @@ api.interceptors.response.use(
     return response
   },
   (error) => {
-    if (error.code === 'ERR_NETWORK') {
-      toast.error('Service not available. Try again later.')
-    }
-
     if (error.response.status === 401) {
       useAuthStore.getState().clearCredentials()
 
       return
     }
 
-    toast.error(error.response.data.message)
+    if (error.code === 'ERR_NETWORK' || error.response.status === 502) {
+      toast.error('Service not available. Try again later.')
+    }
+
+    if (error.response.data.message) {
+      toast.error(error.response.data.message)
+    }
 
     return Promise.reject(error)
   },

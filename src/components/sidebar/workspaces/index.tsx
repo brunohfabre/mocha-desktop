@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { useLocation, useSearchParams } from 'react-router-dom'
 
 import { Check, ChevronsUpDown } from 'lucide-react'
@@ -12,6 +12,7 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { api } from '@/lib/api'
 import { cn } from '@/lib/utils'
+import { useWorkspaceStore } from '@/stores/workspace'
 import { useQuery } from '@tanstack/react-query'
 
 import { CreateWorkspaceModal } from './create-workspace-modal'
@@ -28,16 +29,10 @@ export function Workspaces() {
 
   const expanded = location.pathname === '/'
 
-  const [workspaceSelected, setWorkspaceSelected] =
-    useState<WorkspaceType | null>(() => {
-      const persistedData = localStorage.getItem('mocha:workspace')
-
-      if (persistedData) {
-        return JSON.parse(persistedData)
-      }
-
-      return null
-    })
+  const workspaceSelected = useWorkspaceStore(
+    (state) => state.workspaceSelected,
+  )
+  const selectWorkspace = useWorkspaceStore((state) => state.selectWorkspace)
 
   const { data, isPending, isSuccess } = useQuery({
     queryKey: ['workspaces'],
@@ -52,19 +47,13 @@ export function Workspaces() {
 
   useEffect(() => {
     if (data?.length && isSuccess && !workspaceSelected) {
-      handleSelectWorkspace(data[0])
+      selectWorkspace(data[0].id)
     }
-  }, [data, isSuccess, workspaceSelected])
+  }, [data, isSuccess, workspaceSelected, selectWorkspace])
 
   // function handleNavigateToWorkspaces() {
   //   navigate('/workspaces')
   // }
-
-  function handleSelectWorkspace(workspace: WorkspaceType) {
-    setWorkspaceSelected(workspace)
-
-    localStorage.setItem('mocha:workspace', JSON.stringify(workspace))
-  }
 
   function handleOpenCreateWorkspaceModal() {
     setSearchParams((state) => {
@@ -73,6 +62,9 @@ export function Workspaces() {
       return state
     })
   }
+
+  const workspaceSelectedName =
+    data?.find((workspace) => workspace.id === workspaceSelected)?.name ?? ''
 
   if (isPending) {
     return (
@@ -84,7 +76,7 @@ export function Workspaces() {
 
   return (
     <>
-      <CreateWorkspaceModal selectWorkspace={handleSelectWorkspace} />
+      <CreateWorkspaceModal selectWorkspace={selectWorkspace} />
 
       <DropdownMenu>
         <DropdownMenuTrigger>
@@ -95,7 +87,7 @@ export function Workspaces() {
             )}
           >
             {expanded && (
-              <span className="text-sm">{workspaceSelected?.name}</span>
+              <span className="text-sm">{workspaceSelectedName}</span>
             )}
 
             <ChevronsUpDown className="w-4 h-4" />
@@ -111,10 +103,10 @@ export function Workspaces() {
             <DropdownMenuItem
               key={workspace.id}
               className="flex justify-between items-center"
-              onClick={() => handleSelectWorkspace(workspace)}
+              onClick={() => selectWorkspace(workspace.id)}
             >
               {workspace.name}
-              {workspace.id === workspaceSelected?.id && (
+              {workspace.id === workspaceSelected && (
                 <Check className="w-4 h-4" />
               )}
             </DropdownMenuItem>
