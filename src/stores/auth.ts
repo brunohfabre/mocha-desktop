@@ -1,6 +1,8 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 
+import { useOrganizationStore } from './organization'
+
 type User = {
   id: string
   name: string
@@ -29,11 +31,14 @@ export const useAuthStore = create(
           token,
           user,
         })),
-      clearCredentials: () =>
+      clearCredentials: () => {
+        useOrganizationStore.getState().selectOrganization('')
+
         set(() => ({
           token: '',
           user: null,
-        })),
+        }))
+      },
     }),
     {
       name: 'auth',

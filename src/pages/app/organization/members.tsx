@@ -69,7 +69,7 @@ export function Members() {
           <AlertDialogHeader>
             <AlertDialogTitle>Remove member</AlertDialogTitle>
             <AlertDialogDescription>
-              Really want to remove this member from workspace?
+              Really want to remove this member from organization?
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>

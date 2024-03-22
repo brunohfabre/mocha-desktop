@@ -3,13 +3,13 @@ import { createBrowserRouter } from 'react-router-dom'
 import { AppLayout } from './pages/_layouts/app-layout'
 import { AuthLayout } from './pages/_layouts/auth-layout'
 import { InternalLayout } from './pages/_layouts/internal-layout'
+import { Collections } from './pages/app/collections'
+import { Home } from './pages/app/home'
+import { Notifications } from './pages/app/notifications'
+import { Organization } from './pages/app/organization'
+import { Profile } from './pages/app/profile'
 import { AccountVerification } from './pages/auth/account-verification'
 import { SignIn } from './pages/auth/sign-in'
-import { Collections } from './pages/collections'
-import { Home } from './pages/home'
-import { Notifications } from './pages/notifications'
-import { Profile } from './pages/profile'
-import { Workspace } from './pages/workspace'
 
 export const router = createBrowserRouter([
   {
@@ -33,8 +33,8 @@ export const router = createBrowserRouter([
         element: <Profile />,
       },
       {
-        path: '/workspaces/:id',
-        element: <Workspace />,
+        path: '/organizations/:id',
+        element: <Organization />,
       },
       {
         path: '/notifications',

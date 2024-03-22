@@ -4,7 +4,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { Loader2 } from 'lucide-react'
 import { toast } from 'sonner'
 
-import { WorkspaceType } from '@/components/sidebar/workspaces'
+import { OrganizationType } from '@/components/sidebar/organizations'
 import { Button } from '@/components/ui/button'
 import {
   Dialog,
@@ -17,7 +17,7 @@ import {
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { api } from '@/lib/api'
-import { useWorkspaceStore } from '@/stores/workspace'
+import { useOrganizationStore } from '@/stores/organization'
 import { useQueryClient } from '@tanstack/react-query'
 
 export function DeleteSection() {
@@ -26,10 +26,12 @@ export function DeleteSection() {
 
   const queryClient = useQueryClient()
 
-  const workspaceSelected = useWorkspaceStore(
-    (state) => state.workspaceSelected,
+  const organizationSelected = useOrganizationStore(
+    (state) => state.organizationSelected,
   )
-  const selectWorkspace = useWorkspaceStore((state) => state.selectWorkspace)
+  const selectOrganization = useOrganizationStore(
+    (state) => state.selectOrganization,
+  )
 
   const [isLoading, setIsLoading] = useState(false)
   const [deleteDialogVisible, setDeleteDialogVisible] = useState(false)
@@ -44,20 +46,20 @@ export function DeleteSection() {
     try {
       setIsLoading(true)
 
-      const workspaces = queryClient.getQueryData([
-        'workspaces',
-      ]) as WorkspaceType[]
+      const organizations = queryClient.getQueryData([
+        'organizations',
+      ]) as OrganizationType[]
 
-      if (workspaces.length <= 1) {
-        toast.error('Cannot delete all workspaces.')
+      if (organizations.length <= 1) {
+        toast.error('Cannot delete all organizations.')
 
         return
       }
 
-      await api.delete(`/workspaces/${id}`)
+      await api.delete(`/organizations/${id}`)
 
-      if (id === workspaceSelected) {
-        selectWorkspace(workspaces[0].id)
+      if (id === organizationSelected) {
+        selectOrganization(organizations[0].id)
       }
 
       navigate(-1)
@@ -71,9 +73,9 @@ export function DeleteSection() {
       <Dialog open={deleteDialogVisible} onOpenChange={setDeleteDialogVisible}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Delete workspace</DialogTitle>
+            <DialogTitle>Delete organization</DialogTitle>
             <DialogDescription>
-              Really want to delete this workspace?
+              Really want to delete this organization?
             </DialogDescription>
           </DialogHeader>
 
@@ -105,7 +107,7 @@ export function DeleteSection() {
               variant="destructive"
             >
               {isLoading && <Loader2 className="w-4 h-4 animate-spin mr-2" />}
-              Delete workspace
+              Delete organization
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -117,9 +119,9 @@ export function DeleteSection() {
         <div className="border rounded-lg flex flex-col p-4 gap-8">
           <div className="flex justify-between items-center">
             <div>
-              <p className="text-base font-medium">Delete workspace?</p>
+              <p className="text-base font-medium">Delete organization?</p>
               <p className="text-sm text-zinc-500">
-                This action delete all data of workspace.
+                This action delete all data of organization.
               </p>
             </div>
 

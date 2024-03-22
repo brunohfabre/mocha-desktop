@@ -3,7 +3,7 @@ import { toast } from 'sonner'
 
 import { env } from '@/env'
 import { useAuthStore } from '@/stores/auth'
-import { useWorkspaceStore } from '@/stores/workspace'
+import { useOrganizationStore } from '@/stores/organization'
 
 export const api = axios.create({
   baseURL: env.VITE_APP_API_URL,
@@ -17,10 +17,10 @@ api.interceptors.request.use(
       config.headers.Authorization = `Bearer ${token}`
     }
 
-    const workspace = useWorkspaceStore.getState().workspaceSelected
+    const organization = useOrganizationStore.getState().organizationSelected
 
-    if (workspace) {
-      config.headers['workspace-id'] = workspace
+    if (organization) {
+      config.headers['organization-id'] = organization
     }
 
     return config
@@ -35,7 +35,7 @@ api.interceptors.response.use(
     return response
   },
   (error) => {
-    if (error.response.status === 401) {
+    if (error.response?.status === 401) {
       useAuthStore.getState().clearCredentials()
 
       return

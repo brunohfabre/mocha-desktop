@@ -49,5 +49,5 @@ export function UpdateProvider({ children }: { children: ReactNode }) {
     )
   }
 
-  return <div>{children}</div>
+  return children
 }

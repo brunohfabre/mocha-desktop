@@ -96,7 +96,7 @@ export function AccountVerification() {
       </form>
 
       <footer className="p-4 text-center">
-        <p className="text-muted-foreground text-sm leading-relaxed w-full max-w-80 md:max-w-none">
+        <p className="text-muted-foreground text-xs leading-relaxed w-full max-w-80 md:max-w-none">
           By clicking verify code, you agree to our{' '}
           <Link
             to="/terms-of-service"

@@ -1,4 +1,3 @@
-import { useEffect } from 'react'
 import { useLocation, useSearchParams } from 'react-router-dom'
 
 import { Check, ChevronsUpDown } from 'lucide-react'
@@ -12,50 +11,46 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { api } from '@/lib/api'
 import { cn } from '@/lib/utils'
-import { useWorkspaceStore } from '@/stores/workspace'
+import { useOrganizationStore } from '@/stores/organization'
 import { useQuery } from '@tanstack/react-query'
 
-import { CreateWorkspaceModal } from './create-workspace-modal'
+import { CreateOrganizationModal } from './create-organization-modal'
 
-export type WorkspaceType = {
+export type OrganizationType = {
   id: string
   name: string
 }
 
-export function Workspaces() {
+export function Organizations() {
   const [, setSearchParams] = useSearchParams()
 
   const location = useLocation()
 
   const expanded = location.pathname === '/'
 
-  const workspaceSelected = useWorkspaceStore(
-    (state) => state.workspaceSelected,
+  const organizationSelected = useOrganizationStore(
+    (state) => state.organizationSelected,
   )
-  const selectWorkspace = useWorkspaceStore((state) => state.selectWorkspace)
+  const selectOrganization = useOrganizationStore(
+    (state) => state.selectOrganization,
+  )
 
-  const { data, isPending, isSuccess } = useQuery({
-    queryKey: ['workspaces'],
+  const { data, isPending } = useQuery({
+    queryKey: ['organizations'],
     queryFn: async () => {
-      const response = await api.get<{ workspaces: WorkspaceType[] }>(
-        '/workspaces',
+      const response = await api.get<{ organizations: OrganizationType[] }>(
+        '/organizations',
       )
 
-      return response.data.workspaces
+      if (!organizationSelected) {
+        selectOrganization(response.data.organizations[0].id)
+      }
+
+      return response.data.organizations
     },
   })
 
-  useEffect(() => {
-    if (data?.length && isSuccess && !workspaceSelected) {
-      selectWorkspace(data[0].id)
-    }
-  }, [data, isSuccess, workspaceSelected, selectWorkspace])
-
-  // function handleNavigateToWorkspaces() {
-  //   navigate('/workspaces')
-  // }
-
-  function handleOpenCreateWorkspaceModal() {
+  function handleOpenCreateOrganizationModal() {
     setSearchParams((state) => {
       state.set('modal', 'open')
 
@@ -63,8 +58,9 @@ export function Workspaces() {
     })
   }
 
-  const workspaceSelectedName =
-    data?.find((workspace) => workspace.id === workspaceSelected)?.name ?? ''
+  const organizationSelectedName =
+    data?.find((organization) => organization.id === organizationSelected)
+      ?.name ?? ''
 
   if (isPending) {
     return (
@@ -76,7 +72,7 @@ export function Workspaces() {
 
   return (
     <>
-      <CreateWorkspaceModal selectWorkspace={selectWorkspace} />
+      <CreateOrganizationModal selectOrganization={selectOrganization} />
 
       <DropdownMenu>
         <DropdownMenuTrigger>
@@ -87,7 +83,7 @@ export function Workspaces() {
             )}
           >
             {expanded && (
-              <span className="text-sm">{workspaceSelectedName}</span>
+              <span className="text-sm">{organizationSelectedName}</span>
             )}
 
             <ChevronsUpDown className="w-4 h-4" />
@@ -99,28 +95,28 @@ export function Workspaces() {
           side={expanded ? 'bottom' : 'right'}
           align={expanded ? 'center' : 'start'}
         >
-          {data?.map((workspace) => (
+          {data?.map((organization) => (
             <DropdownMenuItem
-              key={workspace.id}
+              key={organization.id}
               className="flex justify-between items-center"
-              onClick={() => selectWorkspace(workspace.id)}
+              onClick={() => selectOrganization(organization.id)}
             >
-              {workspace.name}
-              {workspace.id === workspaceSelected && (
+              {organization.name}
+              {organization.id === organizationSelected && (
                 <Check className="w-4 h-4" />
               )}
             </DropdownMenuItem>
           ))}
 
           {/* <DropdownMenuSeparator />
-          <DropdownMenuItem onClick={handleNavigateToWorkspaces}>
-            All workspaces
+          <DropdownMenuItem onClick={handleNavigateToOrganizations}>
+            All organizations
           </DropdownMenuItem> */}
 
           <DropdownMenuSeparator />
 
-          <DropdownMenuItem onClick={handleOpenCreateWorkspaceModal}>
-            + Create workspace
+          <DropdownMenuItem onClick={handleOpenCreateOrganizationModal}>
+            + Create organization
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>

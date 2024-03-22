@@ -7,7 +7,7 @@ import LogoDarkVector from '@/assets/logo-dark.png'
 import LogoLightVector from '@/assets/logo-light.png'
 import { cn } from '@/lib/utils'
 import { useAuthStore } from '@/stores/auth'
-import { useWorkspaceStore } from '@/stores/workspace'
+import { useOrganizationStore } from '@/stores/organization'
 import { getShortName } from '@/utils/get-short-name'
 
 import { useTheme } from '../theme-provider'
@@ -20,7 +20,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '../ui/dropdown-menu'
-import { Workspaces } from './workspaces'
+import { Organizations } from './organizations'
 
 export function Sidebar() {
   const navigate = useNavigate()
@@ -29,8 +29,8 @@ export function Sidebar() {
   const user = useAuthStore((state) => state.user)
   const clearCredentials = useAuthStore((state) => state.clearCredentials)
 
-  const workspaceSelected = useWorkspaceStore(
-    (state) => state.workspaceSelected,
+  const organizationSelected = useOrganizationStore(
+    (state) => state.organizationSelected,
   )
 
   const [expanded, setExpanded] = useState(true)
@@ -52,8 +52,8 @@ export function Sidebar() {
     navigate('/collections')
   }
 
-  function handleNavigateToWorkspaceSettings() {
-    navigate(`/workspaces/${workspaceSelected}`)
+  function handleNavigateToOrganizationSettings() {
+    navigate(`/organizations/${organizationSelected}`)
   }
 
   // function handleNavigateToNotifications() {
@@ -95,7 +95,7 @@ export function Sidebar() {
         )}
       </header>
 
-      <Workspaces />
+      <Organizations />
 
       <div className="flex-1 flex flex-col">
         <span
@@ -162,7 +162,7 @@ export function Sidebar() {
             !expanded && 'self-center',
           )}
         >
-          {expanded ? 'Workspace' : 'W'}
+          {expanded ? 'Organization' : 'W'}
         </span>
 
         <button
@@ -171,7 +171,7 @@ export function Sidebar() {
             'flex items-center justify-start gap-1.5 px-3 h-10 text-sm text-gray-950 enabled:hover:bg-muted disabled:opacity-50 disabled:cursor-not-allowed',
             !expanded && 'justify-center',
           )}
-          onClick={handleNavigateToWorkspaceSettings}
+          onClick={handleNavigateToOrganizationSettings}
         >
           <Settings size={16} />
 

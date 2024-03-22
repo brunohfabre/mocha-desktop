@@ -6,7 +6,7 @@ import { Loader2 } from 'lucide-react'
 import { toast } from 'sonner'
 import { z } from 'zod'
 
-import { WorkspaceType } from '@/components/sidebar/workspaces'
+import { OrganizationType } from '@/components/sidebar/organizations'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -25,7 +25,7 @@ const formSchema = z.object({
 
 type FormData = z.infer<typeof formSchema>
 
-export function Workspace() {
+export function Organization() {
   const { id } = useParams<{ id: string }>()
 
   const [isLoading, setIsLoading] = useState(false)
@@ -35,29 +35,31 @@ export function Workspace() {
   })
 
   const { isPending } = useQuery({
-    queryKey: ['workspaces', id],
+    queryKey: ['organizations', id],
     queryFn: async () => {
-      const response = await api.get(`/workspaces/${id}`)
+      const response = await api.get(`/organizations/${id}`)
 
-      reset(response.data.workspace)
+      reset(response.data.organization)
     },
   })
 
-  async function updateWorkspace({ name }: FormData) {
+  async function updateOrganization({ name }: FormData) {
     try {
       setIsLoading(true)
 
-      const response = await api.put(`/workspaces/${id}`, {
+      const response = await api.put(`/organizations/${id}`, {
         name,
       })
 
-      queryClient.setQueryData(['workspaces'], (prevState: WorkspaceType[]) =>
-        prevState.map((workspace) =>
-          workspace.id === id ? response.data.workspace : workspace,
-        ),
+      queryClient.setQueryData(
+        ['organizations'],
+        (prevState: OrganizationType[]) =>
+          prevState.map((organization) =>
+            organization.id === id ? response.data.organization : organization,
+          ),
       )
 
-      toast.success('Workspace updated successfully.')
+      toast.success('Organization updated successfully.')
     } finally {
       setIsLoading(false)
     }
@@ -80,11 +82,11 @@ export function Workspace() {
         <TabsContent value="general">
           <div className="flex flex-col gap-8 mt-8">
             <div className="flex flex-col gap-2">
-              <strong className="text-lg font-semibold">Workspace</strong>
+              <strong className="text-lg font-semibold">Organization</strong>
 
               <form
                 className="border rounded-lg flex flex-col p-4 gap-8"
-                onSubmit={handleSubmit(updateWorkspace)}
+                onSubmit={handleSubmit(updateOrganization)}
               >
                 <div className="space-y-1">
                   <Label>Name</Label>
