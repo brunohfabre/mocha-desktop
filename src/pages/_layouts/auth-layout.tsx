@@ -35,7 +35,6 @@ export function AuthLayout() {
           />
         </button>
       </header>
-
       <Outlet />
     </div>
   )

@@ -1,62 +1,59 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { RouterProvider } from 'react-router-dom'
 
-import LogoDark from '@/assets/logo-dark.png'
-import LogoLight from '@/assets/logo-light.png'
 import { QueryClientProvider } from '@tanstack/react-query'
+import { relaunch } from '@tauri-apps/api/process'
+import { checkUpdate, installUpdate } from '@tauri-apps/api/updater'
 
-import { ThemeProvider, useTheme } from './components/theme-provider'
+import { ThemeProvider } from './components/theme-provider'
 import { Toaster } from './components/ui/sonner'
-import { AppProvider } from './contexts'
-import { api } from './lib/api'
 import { queryClient } from './lib/react-query'
 import { router } from './routes'
-import { useAuthStore } from './stores/auth'
 
 export function App() {
-  const { theme } = useTheme()
-
-  const setCredentials = useAuthStore((state) => state.setCredentials)
+  const firstRenderRef = useRef(true)
 
   const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
-    async function loadMe() {
+    async function verifyUpdate() {
       try {
-        setIsLoading(true)
+        firstRenderRef.current = false
 
-        const response = await api.get('/me')
+        const { shouldUpdate } = await checkUpdate()
 
-        setCredentials(response.data)
+        if (shouldUpdate) {
+          await installUpdate()
+
+          await relaunch()
+        }
       } finally {
         setIsLoading(false)
       }
     }
 
-    loadMe()
-  }, [setCredentials])
+    if (!firstRenderRef.current) {
+      return
+    }
+
+    verifyUpdate()
+  }, [])
 
   if (isLoading) {
     return (
       <div className="min-h-screen w-full flex items-center justify-center">
-        {theme === 'light' ? (
-          <img src={LogoLight} alt="Mocha" className="w-16 animate-bounce" />
-        ) : (
-          <img src={LogoDark} alt="Mocha" className="w-16 animate-bounce" />
-        )}
+        <p className="text-sm">Verifying update</p>
       </div>
     )
   }
 
   return (
-    <QueryClientProvider client={queryClient}>
-      <ThemeProvider defaultTheme="light">
-        <AppProvider>
-          <RouterProvider router={router} />
-        </AppProvider>
-      </ThemeProvider>
+    <ThemeProvider defaultTheme="light">
+      <QueryClientProvider client={queryClient}>
+        <RouterProvider router={router} />
+      </QueryClientProvider>
 
       <Toaster position="top-right" />
-    </QueryClientProvider>
+    </ThemeProvider>
   )
 }
