@@ -30,7 +30,7 @@
     "bundle": {
       "active": true,
       "targets": "all",
-      "identifier": "com.tauri.dev",
+      "identifier": "co.coddee.mocha",
       "icon": [
         "icons/32x32.png",
         "icons/128x128.png",
@@ -38,14 +38,6 @@
         "icons/icon.icns",
         "icons/icon.ico"
       ]
-    },
-    "updater": {
-      "active": true,
-      "endpoints": [
-        "https://releases.myapp.com/{{target}}/{{arch}}/{{current_version}}"
-      ],
-      "dialog": false,
-      "pubkey": "YOUR_UPDATER_SIGNATURE_PUBKEY_HERE"
     }
   }
 }
