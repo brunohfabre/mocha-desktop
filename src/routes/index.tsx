@@ -1,5 +1,6 @@
 import { createBrowserRouter } from 'react-router-dom'
 
+import { AccountVerification } from '@/pages/account-verification'
 import { Home } from '@/pages/home'
 import { SignIn } from '@/pages/sign-in'
 
@@ -25,6 +26,10 @@ export const router = createBrowserRouter([
       {
         path: '/sign-in',
         element: <SignIn />,
+      },
+      {
+        path: '/account-verification',
+        element: <AccountVerification />,
       },
     ],
   },

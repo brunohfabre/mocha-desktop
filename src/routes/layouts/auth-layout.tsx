@@ -11,8 +11,6 @@ export function AuthLayout() {
 
   return (
     <div className="flex h-screen w-full flex-col antialiased">
-      <span>Auth layout</span>
-
       <Outlet />
     </div>
   )
