@@ -2,6 +2,7 @@ import { createBrowserRouter } from 'react-router-dom'
 
 import { AccountVerification } from '@/pages/account-verification'
 import { Home } from '@/pages/home'
+import { NoMatch } from '@/pages/no-match'
 import { SignIn } from '@/pages/sign-in'
 
 import { AppLayout } from './layouts/app-layout'
@@ -37,5 +38,9 @@ export const router = createBrowserRouter([
     path: '/',
     element: <InternalLayout />,
     children: [],
+  },
+  {
+    path: '*',
+    element: <NoMatch />,
   },
 ])

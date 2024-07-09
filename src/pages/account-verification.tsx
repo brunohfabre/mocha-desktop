@@ -11,6 +11,7 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { authStore } from '@/stores/auth'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { open } from '@tauri-apps/api/shell'
 
 const formSchema = z.object({
   code: z.string().min(1),
@@ -125,12 +126,9 @@ export function AccountVerification() {
               <button
                 type="button"
                 className="underline underline-offset-4 hover:text-black"
-                onClick={
-                  () => {}
-                  // window.api.openExternalLink({
-                  //   url: 'https://mocha.coddee.co/terms-of-service',
-                  // })
-                }
+                onClick={() => {
+                  open('https://mocha.coddee.co/terms-of-service')
+                }}
               >
                 Terms of Service
               </button>{' '}
@@ -138,12 +136,9 @@ export function AccountVerification() {
               <button
                 type="button"
                 className="underline underline-offset-4 hover:text-black"
-                onClick={
-                  () => {}
-                  // window.api.openExternalLink({
-                  //   url: 'https://mocha.coddee.co/privacy-policy',
-                  // })
-                }
+                onClick={() => {
+                  open('https://mocha.coddee.co/privacy-policy')
+                }}
               >
                 Privacy Policy
               </button>
