@@ -1,26 +1,27 @@
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 
 import {
   Bell,
+  Check,
   ChevronDown,
   ChevronsUpDown,
   Database,
   Files,
   KeyRound,
+  Plus,
   Settings,
   StickyNote,
 } from 'lucide-react'
 
-import LogoLight from '@/assets/images/logo-light.png'
 import { authStore } from '@/stores/auth'
 
+import { useTheme, type Theme } from './theme-provider'
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar'
 import { Button } from './ui/button'
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
   DropdownMenuPortal,
   DropdownMenuRadioGroup,
   DropdownMenuRadioItem,
@@ -34,8 +35,15 @@ import { Separator } from './ui/separator'
 
 export function Sidebar() {
   const navigate = useNavigate()
+  const location = useLocation()
+
+  const { theme, setTheme } = useTheme()
 
   const clearCredentials = authStore((state) => state.clearCredentials)
+
+  function handleNavigateToOrganizations() {
+    navigate('/organizations')
+  }
 
   function handleNavigateToCreateOrganization() {
     navigate('/create-organization')
@@ -57,6 +65,14 @@ export function Sidebar() {
     navigate('/notes')
   }
 
+  function handleNavigateToOrganization() {
+    navigate('/organizations/123123')
+  }
+
+  function handleNavigateToNotifications() {
+    navigate('/notifications')
+  }
+
   function handleNavigateToAccount() {
     navigate('/account')
   }
@@ -67,11 +83,11 @@ export function Sidebar() {
 
   return (
     <div className="flex w-64 flex-col">
-      <header className="flex h-[52px] items-center px-4">
+      {/* <header className="flex h-[52px] items-center px-4">
         <img src={LogoLight} alt="Mocha" className="w-10" />
       </header>
 
-      <Separator orientation="horizontal" />
+      <Separator orientation="horizontal" /> */}
 
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
@@ -82,13 +98,22 @@ export function Sidebar() {
         </DropdownMenuTrigger>
 
         <DropdownMenuContent className="w-[calc(var(--radix-dropdown-menu-trigger-width)-8px)]">
-          <DropdownMenuLabel>Organizations</DropdownMenuLabel>
-          <DropdownMenuItem>Org #1</DropdownMenuItem>
-          <DropdownMenuItem>Org #2</DropdownMenuItem>
-          <DropdownMenuItem>Org #3</DropdownMenuItem>
+          <DropdownMenuItem>Organization #1</DropdownMenuItem>
+          <DropdownMenuItem className="justify-between">
+            Organization #2
+            <Check className="size-4" />
+          </DropdownMenuItem>
+          <DropdownMenuItem>Organization #3</DropdownMenuItem>
+          <DropdownMenuItem>Organization #4</DropdownMenuItem>
+
+          <DropdownMenuSeparator />
+          <DropdownMenuItem onClick={handleNavigateToOrganizations}>
+            All organizations
+          </DropdownMenuItem>
+
           <DropdownMenuSeparator />
           <DropdownMenuItem onClick={handleNavigateToCreateOrganization}>
-            + Create organization
+            <Plus className="mr-2 size-4" /> Create organization
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
@@ -96,9 +121,15 @@ export function Sidebar() {
       <Separator orientation="horizontal" />
 
       <div className="flex flex-1 flex-col p-2">
+        <div className="px-2">
+          <span className="text-xs text-muted-foreground">General</span>
+        </div>
+
         <Button
           type="button"
-          variant="ghost"
+          variant={
+            location.pathname.includes('collections') ? 'default' : 'ghost'
+          }
           className="justify-start gap-2 px-2 font-normal"
           onClick={handleNavigateToCollections}
         >
@@ -107,7 +138,9 @@ export function Sidebar() {
         </Button>
         <Button
           type="button"
-          variant="ghost"
+          variant={
+            location.pathname.includes('databases') ? 'default' : 'ghost'
+          }
           className="justify-start gap-2 px-2 font-normal"
           onClick={handleNavigateToDatabases}
           disabled={false}
@@ -117,7 +150,9 @@ export function Sidebar() {
         </Button>
         <Button
           type="button"
-          variant="ghost"
+          variant={
+            location.pathname.includes('passwords') ? 'default' : 'ghost'
+          }
           className="justify-start gap-2 px-2 font-normal"
           onClick={handleNavigateToPasswords}
           disabled={false}
@@ -127,7 +162,7 @@ export function Sidebar() {
         </Button>
         <Button
           type="button"
-          variant="ghost"
+          variant={location.pathname.includes('notes') ? 'default' : 'ghost'}
           className="justify-start gap-2 px-2 font-normal"
           onClick={handleNavigateToNotes}
           disabled={false}
@@ -147,11 +182,14 @@ export function Sidebar() {
       </div> */}
 
       <div className="flex flex-col p-2">
+        <div className="px-2">
+          <span className="text-xs text-muted-foreground">General</span>
+        </div>
         <Button
           type="button"
           variant="ghost"
           className="justify-start gap-2 px-2 font-normal"
-          onClick={handleNavigateToPasswords}
+          onClick={handleNavigateToOrganization}
           disabled={false}
         >
           <Settings className="size-4 stroke-[1.5px]" />
@@ -162,11 +200,12 @@ export function Sidebar() {
           type="button"
           variant="ghost"
           className="justify-start gap-2 px-2 font-normal"
-          onClick={handleNavigateToNotes}
+          onClick={handleNavigateToNotifications}
           disabled={false}
         >
           <Bell className="size-4 stroke-[1.5px]" />
           Notifications
+          <div className="ml-auto size-2 rounded-full bg-orange-500" />
         </Button>
       </div>
 
@@ -189,23 +228,32 @@ export function Sidebar() {
         </DropdownMenuTrigger>
 
         <DropdownMenuContent className="w-[calc(var(--radix-dropdown-menu-trigger-width)-8px)]">
+          <div className="mb-2 flex flex-col p-2">
+            <p className="text-sm font-medium">John Doe</p>
+            <p className="text-sm text-muted-foreground">johndoe@email.com</p>
+          </div>
           <DropdownMenuItem onClick={handleNavigateToAccount}>
-            Profile
+            Account settings
           </DropdownMenuItem>
+
+          <DropdownMenuSeparator />
 
           <DropdownMenuSub>
             <DropdownMenuSubTrigger>Theme</DropdownMenuSubTrigger>
             <DropdownMenuPortal>
               <DropdownMenuSubContent>
                 <DropdownMenuRadioGroup
-                  value="light"
-                  onValueChange={console.log}
+                  value={theme}
+                  onValueChange={(value) => setTheme(value as Theme)}
                 >
                   <DropdownMenuRadioItem value="light">
                     Light
                   </DropdownMenuRadioItem>
-                  <DropdownMenuRadioItem value="dark" disabled>
+                  <DropdownMenuRadioItem value="dark">
                     Dark
+                  </DropdownMenuRadioItem>
+                  <DropdownMenuRadioItem value="system">
+                    System
                   </DropdownMenuRadioItem>
                 </DropdownMenuRadioGroup>
               </DropdownMenuSubContent>
