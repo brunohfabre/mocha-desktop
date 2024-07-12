@@ -210,7 +210,12 @@ export function Organization() {
                     </div>
                   </div>
 
-                  <Button type="button">Revoke</Button>
+                  <div className="flex gap-2">
+                    <Button type="button" variant="outline">
+                      Resend
+                    </Button>
+                    <Button type="button">Revoke</Button>
+                  </div>
                 </div>
 
                 <Separator orientation="horizontal" />
@@ -231,7 +236,12 @@ export function Organization() {
                     </div>
                   </div>
 
-                  <Button type="button">Revoke</Button>
+                  <div className="flex gap-2">
+                    <Button type="button" variant="outline">
+                      Resend
+                    </Button>
+                    <Button type="button">Revoke</Button>
+                  </div>
                 </div>
               </div>
             </div>
