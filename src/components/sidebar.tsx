@@ -13,7 +13,8 @@ import {
   StickyNote,
 } from 'lucide-react'
 
-import { authStore } from '@/stores/auth'
+import { useTabs } from '@/contexts/tabs'
+import { useAuthStore } from '@/stores/auth'
 
 import { useTheme, type Theme } from './theme-provider'
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar'
@@ -39,7 +40,9 @@ export function Sidebar() {
 
   const { theme, setTheme } = useTheme()
 
-  const clearCredentials = authStore((state) => state.clearCredentials)
+  const clearCredentials = useAuthStore((state) => state.clearCredentials)
+
+  const { addTab } = useTabs()
 
   function handleNavigateToOrganizations() {
     navigate('/organizations')
@@ -51,18 +54,46 @@ export function Sidebar() {
 
   function handleNavigateToCollections() {
     navigate('/collections')
+
+    addTab({
+      id: crypto.randomUUID(),
+      name: 'Collections',
+      pinned: false,
+      route: '/collections',
+    })
   }
 
   function handleNavigateToDatabases() {
     navigate('/databases')
+
+    addTab({
+      id: crypto.randomUUID(),
+      name: 'Databases',
+      pinned: false,
+      route: '/databases',
+    })
   }
 
   function handleNavigateToPasswords() {
     navigate('/passwords')
+
+    addTab({
+      id: crypto.randomUUID(),
+      name: 'Passwords',
+      pinned: false,
+      route: '/passwords',
+    })
   }
 
   function handleNavigateToNotes() {
     navigate('/notes')
+
+    addTab({
+      id: crypto.randomUUID(),
+      name: 'Notes',
+      pinned: false,
+      route: '/notes',
+    })
   }
 
   function handleNavigateToOrganization() {
@@ -83,12 +114,6 @@ export function Sidebar() {
 
   return (
     <div className="flex w-64 flex-col">
-      {/* <header className="flex h-[52px] items-center px-4">
-        <img src={LogoLight} alt="Mocha" className="w-10" />
-      </header>
-
-      <Separator orientation="horizontal" /> */}
-
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <div className="flex h-[52px] cursor-pointer items-center justify-between pl-4 pr-2 text-sm hover:bg-muted">
@@ -155,7 +180,6 @@ export function Sidebar() {
           }
           className="justify-start gap-2 px-2 font-normal"
           onClick={handleNavigateToPasswords}
-          disabled={false}
         >
           <KeyRound className="size-4 stroke-[1.5px]" />
           Passwords
@@ -165,7 +189,6 @@ export function Sidebar() {
           variant={location.pathname.includes('notes') ? 'default' : 'ghost'}
           className="justify-start gap-2 px-2 font-normal"
           onClick={handleNavigateToNotes}
-          disabled={false}
         >
           <StickyNote className="size-4 stroke-[1.5px]" />
           Notes

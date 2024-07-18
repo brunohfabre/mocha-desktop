@@ -19,7 +19,7 @@ interface Store {
   clearCredentials: () => void
 }
 
-export const authStore = create(
+export const useAuthStore = create(
   persist<Store>(
     (set) => ({
       token: '',

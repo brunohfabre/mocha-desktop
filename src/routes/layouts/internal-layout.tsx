@@ -6,7 +6,7 @@ import {
   useNavigate,
 } from 'react-router-dom'
 
-import LogoLight from '@/assets/images/logo-light.png'
+import LogoLight from '@/assets/logo-light.png'
 import { useTheme, type Theme } from '@/components/theme-provider'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import {
@@ -23,7 +23,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { Separator } from '@/components/ui/separator'
-import { authStore } from '@/stores/auth'
+import { useAuthStore } from '@/stores/auth'
 
 export function InternalLayout() {
   const location = useLocation()
@@ -31,8 +31,8 @@ export function InternalLayout() {
 
   const { theme, setTheme } = useTheme()
 
-  const token = authStore((state) => state.token)
-  const clearCredentials = authStore((state) => state.clearCredentials)
+  const token = useAuthStore((state) => state.token)
+  const clearCredentials = useAuthStore((state) => state.clearCredentials)
 
   const isAccountRoute = location.pathname.includes('account')
 

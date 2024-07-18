@@ -3,7 +3,9 @@ import { useNavigate } from 'react-router-dom'
 
 import { z } from 'zod'
 
-import LogoLight from '@/assets/images/logo-light.png'
+import LogoDark from '@/assets/logo-dark.png'
+import LogoLight from '@/assets/logo-light.png'
+import { useTheme } from '@/components/theme-provider'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -19,6 +21,8 @@ type FormData = z.infer<typeof formSchema>
 export function SignIn() {
   const navigate = useNavigate()
 
+  const { theme } = useTheme()
+
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
   })
@@ -32,7 +36,11 @@ export function SignIn() {
   return (
     <div className="mx-auto flex size-full max-w-96 flex-col justify-center gap-8 px-4">
       <div className="mb-4 flex justify-center">
-        <img src={LogoLight} alt="Mocha" className="w-14" />
+        {theme === 'light' ? (
+          <img src={LogoLight} alt="Mocha" className="w-14" />
+        ) : (
+          <img src={LogoDark} alt="Mocha" className="w-14" />
+        )}
       </div>
 
       <form

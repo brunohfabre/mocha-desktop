@@ -1,9 +1,9 @@
 import { Navigate, Outlet } from 'react-router-dom'
 
-import { authStore } from '@/stores/auth'
+import { useAuthStore } from '@/stores/auth'
 
 export function AuthLayout() {
-  const token = authStore((state) => state.token)
+  const token = useAuthStore((state) => state.token)
 
   if (token) {
     return <Navigate to="/" replace />

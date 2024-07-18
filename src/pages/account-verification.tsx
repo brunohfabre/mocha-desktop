@@ -5,11 +5,11 @@ import { useNavigate } from 'react-router-dom'
 import { ChevronLeft } from 'lucide-react'
 import { z } from 'zod'
 
-import LogoLight from '@/assets/images/logo-light.png'
+import LogoLight from '@/assets/logo-light.png'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { authStore } from '@/stores/auth'
+import { useAuthStore } from '@/stores/auth'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { open } from '@tauri-apps/api/shell'
 
@@ -24,7 +24,7 @@ let countdownTimer: any
 export function AccountVerification() {
   const navigate = useNavigate()
 
-  const setCredentials = authStore((state) => state.setCredentials)
+  const setCredentials = useAuthStore((state) => state.setCredentials)
 
   const [time, setTime] = useState(59)
 
