@@ -14,6 +14,7 @@ import {
 } from 'lucide-react'
 
 import { useTabs } from '@/contexts/tabs'
+import { cn } from '@/lib/utils'
 import { useAuthStore } from '@/stores/auth'
 
 import { useTheme, type Theme } from './theme-provider'
@@ -33,16 +34,23 @@ import {
   DropdownMenuTrigger,
 } from './ui/dropdown-menu'
 import { Separator } from './ui/separator'
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from './ui/tooltip'
 
 export function Sidebar() {
   const navigate = useNavigate()
   const location = useLocation()
 
-  const { theme, setTheme } = useTheme()
-
   const clearCredentials = useAuthStore((state) => state.clearCredentials)
 
-  const { addTab } = useTabs()
+  const { theme, setTheme } = useTheme()
+  const { tabs, addTab } = useTabs()
+
+  const isMinimized = tabs.length > 0
 
   function handleNavigateToOrganizations() {
     navigate('/organizations')
@@ -113,16 +121,28 @@ export function Sidebar() {
   }
 
   return (
-    <div className="flex w-64 flex-col">
+    <div className={cn('flex w-64 flex-col', isMinimized && 'w-[52px]')}>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <div className="flex h-[52px] cursor-pointer items-center justify-between pl-4 pr-2 text-sm hover:bg-muted">
-            organizations
+          <div
+            className={cn(
+              'flex h-[52px] cursor-pointer items-center justify-between pl-4 pr-2 text-sm hover:bg-muted',
+              isMinimized && ' px-0 justify-center',
+            )}
+          >
+            {!isMinimized && 'Organization #2'}
             <ChevronsUpDown className="size-4 text-muted-foreground" />
           </div>
         </DropdownMenuTrigger>
 
-        <DropdownMenuContent className="w-[calc(var(--radix-dropdown-menu-trigger-width)-8px)]">
+        <DropdownMenuContent
+          className={cn(
+            'min-w-[calc(var(--radix-dropdown-menu-trigger-width)-8px)]',
+            isMinimized && 'min-w-56',
+          )}
+          align="start"
+          alignOffset={4}
+        >
           <DropdownMenuItem>Organization #1</DropdownMenuItem>
           <DropdownMenuItem className="justify-between">
             Organization #2
@@ -146,53 +166,110 @@ export function Sidebar() {
       <Separator orientation="horizontal" />
 
       <div className="flex flex-1 flex-col p-2">
-        <div className="px-2">
-          <span className="text-xs text-muted-foreground">General</span>
-        </div>
+        <span
+          className={cn(
+            'text-xs text-muted-foreground mx-2 py-1',
+            isMinimized && 'mx-0 text-center',
+          )}
+        >
+          {isMinimized ? 'Gen.' : 'General'}
+        </span>
 
-        <Button
-          type="button"
-          variant={
-            location.pathname.includes('collections') ? 'default' : 'ghost'
-          }
-          className="justify-start gap-2 px-2 font-normal"
-          onClick={handleNavigateToCollections}
-        >
-          <Files className="size-4 stroke-[1.5px]" />
-          Collections
-        </Button>
-        <Button
-          type="button"
-          variant={
-            location.pathname.includes('databases') ? 'default' : 'ghost'
-          }
-          className="justify-start gap-2 px-2 font-normal"
-          onClick={handleNavigateToDatabases}
-          disabled={false}
-        >
-          <Database className="size-4 stroke-[1.5px]" />
-          Databases
-        </Button>
-        <Button
-          type="button"
-          variant={
-            location.pathname.includes('passwords') ? 'default' : 'ghost'
-          }
-          className="justify-start gap-2 px-2 font-normal"
-          onClick={handleNavigateToPasswords}
-        >
-          <KeyRound className="size-4 stroke-[1.5px]" />
-          Passwords
-        </Button>
-        <Button
-          type="button"
-          variant={location.pathname.includes('notes') ? 'default' : 'ghost'}
-          className="justify-start gap-2 px-2 font-normal"
-          onClick={handleNavigateToNotes}
-        >
-          <StickyNote className="size-4 stroke-[1.5px]" />
-          Notes
-        </Button>
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                type="button"
+                variant={
+                  location.pathname === '/collections' ? 'default' : 'ghost'
+                }
+                className={cn(
+                  'justify-start gap-2 px-2 font-normal',
+                  isMinimized && 'justify-center',
+                )}
+                onClick={handleNavigateToCollections}
+              >
+                <Files className="size-4 stroke-[1.5px]" />
+                {!isMinimized && 'Collections'}
+              </Button>
+            </TooltipTrigger>
+
+            {isMinimized && (
+              <TooltipContent side="right">Collections</TooltipContent>
+            )}
+          </Tooltip>
+        </TooltipProvider>
+
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                type="button"
+                variant={
+                  location.pathname === '/databases' ? 'default' : 'ghost'
+                }
+                className={cn(
+                  'justify-start gap-2 px-2 font-normal',
+                  isMinimized && 'justify-center',
+                )}
+                onClick={handleNavigateToDatabases}
+                disabled
+              >
+                <Database className="size-4 stroke-[1.5px]" />
+                {!isMinimized && 'Databases'}
+              </Button>
+            </TooltipTrigger>
+            {isMinimized && (
+              <TooltipContent side="right">Databases</TooltipContent>
+            )}
+          </Tooltip>
+        </TooltipProvider>
+
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                type="button"
+                variant={
+                  location.pathname === '/passwords' ? 'default' : 'ghost'
+                }
+                className={cn(
+                  'justify-start gap-2 px-2 font-normal',
+                  isMinimized && 'justify-center',
+                )}
+                onClick={handleNavigateToPasswords}
+                disabled
+              >
+                <KeyRound className="size-4 stroke-[1.5px]" />
+                {!isMinimized && 'Passwords'}
+              </Button>
+            </TooltipTrigger>
+            {isMinimized && (
+              <TooltipContent side="right">Passwords</TooltipContent>
+            )}
+          </Tooltip>
+        </TooltipProvider>
+
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                type="button"
+                variant={location.pathname === '/notes' ? 'default' : 'ghost'}
+                className={cn(
+                  'justify-start gap-2 px-2 font-normal',
+                  isMinimized && 'justify-center',
+                )}
+                onClick={handleNavigateToNotes}
+                disabled
+              >
+                <StickyNote className="size-4 stroke-[1.5px]" />
+                {!isMinimized && 'Notes'}
+              </Button>
+            </TooltipTrigger>
+            {isMinimized && <TooltipContent side="right">Notes</TooltipContent>}
+          </Tooltip>
+        </TooltipProvider>
       </div>
 
       {/* <div className="px-2">
@@ -205,31 +282,65 @@ export function Sidebar() {
       </div> */}
 
       <div className="flex flex-col p-2">
-        <div className="px-2">
-          <span className="text-xs text-muted-foreground">General</span>
-        </div>
-        <Button
-          type="button"
-          variant="ghost"
-          className="justify-start gap-2 px-2 font-normal"
-          onClick={handleNavigateToOrganization}
-          disabled={false}
+        <span
+          className={cn(
+            'text-xs text-muted-foreground mx-2 py-1',
+            isMinimized && 'mx-0 text-center',
+          )}
         >
-          <Settings className="size-4 stroke-[1.5px]" />
-          Organization settings
-        </Button>
+          {isMinimized ? 'Set.' : 'Settings'}
+        </span>
 
-        <Button
-          type="button"
-          variant="ghost"
-          className="justify-start gap-2 px-2 font-normal"
-          onClick={handleNavigateToNotifications}
-          disabled={false}
-        >
-          <Bell className="size-4 stroke-[1.5px]" />
-          Notifications
-          <div className="ml-auto size-2 rounded-full bg-orange-500" />
-        </Button>
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                type="button"
+                variant="ghost"
+                className={cn(
+                  'justify-start gap-2 px-2 font-normal',
+                  isMinimized && 'justify-center',
+                )}
+                onClick={handleNavigateToOrganization}
+                disabled={false}
+              >
+                <Settings className="size-4 stroke-[1.5px]" />
+                {!isMinimized && 'Organization Settings'}
+              </Button>
+            </TooltipTrigger>
+            {isMinimized && (
+              <TooltipContent side="right">
+                Organization Settings
+              </TooltipContent>
+            )}
+          </Tooltip>
+        </TooltipProvider>
+
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                type="button"
+                variant="ghost"
+                className={cn(
+                  'justify-start gap-2 px-2 font-normal',
+                  isMinimized && 'justify-center',
+                )}
+                onClick={handleNavigateToNotifications}
+                disabled={false}
+              >
+                <div className="relative">
+                  <Bell className="size-4 stroke-[1.5px]" />
+                  <div className="absolute -right-0.5 -top-0.5 ml-auto size-2 rounded-full bg-orange-500" />
+                </div>
+                {!isMinimized && 'Notifications'}
+              </Button>
+            </TooltipTrigger>
+            {isMinimized && (
+              <TooltipContent side="right">Notifications</TooltipContent>
+            )}
+          </Tooltip>
+        </TooltipProvider>
       </div>
 
       <Separator orientation="horizontal" />
@@ -242,15 +353,26 @@ export function Sidebar() {
               <AvatarFallback>JD</AvatarFallback>
             </Avatar>
 
-            <div className="flex-1">
-              <p className="text-sm font-medium">John Doe</p>
-            </div>
+            {!isMinimized && (
+              <>
+                <div className="flex-1">
+                  <p className="text-sm font-medium">John Doe</p>
+                </div>
 
-            <ChevronDown className="size-4 text-muted-foreground" />
+                <ChevronDown className="size-4 text-muted-foreground" />
+              </>
+            )}
           </footer>
         </DropdownMenuTrigger>
 
-        <DropdownMenuContent className="w-[calc(var(--radix-dropdown-menu-trigger-width)-8px)]">
+        <DropdownMenuContent
+          className={cn(
+            'min-w-[calc(var(--radix-dropdown-menu-trigger-width)-8px)]',
+            isMinimized && 'min-w-56',
+          )}
+          align="start"
+          alignOffset={4}
+        >
           <div className="mb-2 flex flex-col p-2">
             <p className="text-sm font-medium">John Doe</p>
             <p className="text-sm text-muted-foreground">johndoe@email.com</p>

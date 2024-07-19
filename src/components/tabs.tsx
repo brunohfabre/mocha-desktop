@@ -4,6 +4,7 @@ import { ChevronLeft, ChevronRight, X } from 'lucide-react'
 
 import { Button } from '@/components/ui/button'
 import { useTabs, type TabType } from '@/contexts/tabs'
+import { cn } from '@/lib/utils'
 
 export function Tabs() {
   const navigate = useNavigate()
@@ -40,7 +41,10 @@ export function Tabs() {
             key={tab.id}
             type="button"
             variant={selectedTab?.id === tab.id ? 'outline' : 'ghost'}
-            className="pr-0"
+            className={cn(
+              'pr-0',
+              selectedTab?.id !== tab.id && 'border border-transparent',
+            )}
             onClick={() => handleClick(tab)}
           >
             {tab.name}

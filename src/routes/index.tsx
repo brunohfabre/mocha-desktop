@@ -3,6 +3,8 @@ import { createBrowserRouter } from 'react-router-dom'
 import { AccountSettings } from '@/pages/account-settings'
 import { AccountVerification } from '@/pages/account-verification'
 import { Collections } from '@/pages/collections'
+import { Collection } from '@/pages/collections/collection'
+import { CreateCollection } from '@/pages/create-collection'
 import { CreateOrganization } from '@/pages/create-organization'
 import { Databases } from '@/pages/databases'
 import { Home } from '@/pages/home'
@@ -43,6 +45,10 @@ export const router = createBrowserRouter([
         path: '/notes',
         element: <Notes />,
       },
+      {
+        path: '/collections/:id',
+        element: <Collection />,
+      },
     ],
   },
   {
@@ -68,6 +74,10 @@ export const router = createBrowserRouter([
       {
         path: '/organizations/:id',
         element: <Organization />,
+      },
+      {
+        path: '/create-collection',
+        element: <CreateCollection />,
       },
     ],
   },
