@@ -9,7 +9,7 @@ import { cn } from '@/lib/utils'
 export function Tabs() {
   const navigate = useNavigate()
 
-  const { tabs, selectedTab, selectTab, removeTab } = useTabs()
+  const { tabs, selectTab, removeTab } = useTabs()
 
   function handleClick(tab: TabType) {
     navigate(tab.route)
@@ -17,7 +17,7 @@ export function Tabs() {
   }
 
   function handleRemove(tab: TabType) {
-    removeTab(tab.id)
+    removeTab(tab)
   }
 
   if (!tabs.length) {
@@ -40,10 +40,10 @@ export function Tabs() {
           <Button
             key={tab.id}
             type="button"
-            variant={selectedTab?.id === tab.id ? 'outline' : 'ghost'}
+            variant={tab.route === location.pathname ? 'outline' : 'ghost'}
             className={cn(
               'pr-0',
-              selectedTab?.id !== tab.id && 'border border-transparent',
+              tab.route !== location.pathname && 'border border-transparent',
             )}
             onClick={() => handleClick(tab)}
           >

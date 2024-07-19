@@ -48,7 +48,7 @@ export function Sidebar() {
   const clearCredentials = useAuthStore((state) => state.clearCredentials)
 
   const { theme, setTheme } = useTheme()
-  const { tabs, addTab } = useTabs()
+  const { tabs } = useTabs()
 
   const isMinimized = tabs.length > 0
 
@@ -62,46 +62,18 @@ export function Sidebar() {
 
   function handleNavigateToCollections() {
     navigate('/collections')
-
-    addTab({
-      id: crypto.randomUUID(),
-      name: 'Collections',
-      pinned: false,
-      route: '/collections',
-    })
   }
 
   function handleNavigateToDatabases() {
     navigate('/databases')
-
-    addTab({
-      id: crypto.randomUUID(),
-      name: 'Databases',
-      pinned: false,
-      route: '/databases',
-    })
   }
 
   function handleNavigateToPasswords() {
     navigate('/passwords')
-
-    addTab({
-      id: crypto.randomUUID(),
-      name: 'Passwords',
-      pinned: false,
-      route: '/passwords',
-    })
   }
 
   function handleNavigateToNotes() {
     navigate('/notes')
-
-    addTab({
-      id: crypto.randomUUID(),
-      name: 'Notes',
-      pinned: false,
-      route: '/notes',
-    })
   }
 
   function handleNavigateToOrganization() {

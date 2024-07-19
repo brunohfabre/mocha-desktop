@@ -4,16 +4,24 @@ import { ChevronRight } from 'lucide-react'
 
 import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
+import { useTabs } from '@/contexts/tabs'
 
 export function Collections() {
   const navigate = useNavigate()
+
+  const { addTab } = useTabs()
 
   function handleNavigateToCreateCollection() {
     navigate('/create-collection')
   }
 
   function handleNavigateToCollection() {
-    navigate('/collections/123123')
+    addTab({
+      id: crypto.randomUUID(),
+      name: 'Collection 123',
+      pinned: false,
+      route: '/collections/123',
+    })
   }
 
   return (
