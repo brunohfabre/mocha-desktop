@@ -15,12 +15,12 @@ export function Collections() {
     navigate('/create-collection')
   }
 
-  function handleNavigateToCollection() {
+  function handleNavigateToCollection(id: string) {
     addTab({
       id: crypto.randomUUID(),
-      name: 'Collection 123',
+      name: `Collection ${id}`,
       pinned: false,
-      route: '/collections/123',
+      route: `/collections/${id}`,
     })
   }
 
@@ -42,7 +42,7 @@ export function Collections() {
             type="button"
             variant="outline"
             size="icon"
-            onClick={handleNavigateToCollection}
+            onClick={() => handleNavigateToCollection('123')}
           >
             <ChevronRight className="size-4" />
           </Button>
@@ -57,7 +57,7 @@ export function Collections() {
             type="button"
             variant="outline"
             size="icon"
-            onClick={handleNavigateToCollection}
+            onClick={() => handleNavigateToCollection('456')}
           >
             <ChevronRight className="size-4" />
           </Button>
