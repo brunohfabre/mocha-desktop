@@ -15,11 +15,20 @@
       "shell": {
         "all": false,
         "open": true
+      },
+      "window": {
+        "all": true
       }
     },
     "windows": [
       {
-        "title": "mocha",
+        "decorations": false,
+        "resizable": true,
+        "maximizable": true,
+        "minimizable": true,
+        "closable": true,
+
+        "title": "Mocha",
         "width": 1280,
         "height": 800
       }

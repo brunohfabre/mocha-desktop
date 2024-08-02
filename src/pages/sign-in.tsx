@@ -74,7 +74,7 @@ export function SignIn() {
           By clicking sign in, you agree to our{' '}
           <button
             type="button"
-            className="underline underline-offset-4 hover:text-black"
+            className="underline underline-offset-4 hover:text-muted-foreground"
             onClick={() => {
               open('https://mocha.coddee.co/terms-of-service')
             }}
@@ -84,7 +84,7 @@ export function SignIn() {
           and{' '}
           <button
             type="button"
-            className="underline underline-offset-4 hover:text-black"
+            className="underline underline-offset-4 hover:text-muted-foreground"
             onClick={() => {
               open('https://mocha.coddee.co/privacy-policy')
             }}

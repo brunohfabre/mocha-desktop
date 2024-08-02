@@ -2,6 +2,7 @@ import { Navigate, Outlet } from 'react-router-dom'
 
 import { Sidebar } from '@/components/sidebar'
 import { Tabs } from '@/components/tabs'
+import { TitleBar } from '@/components/title-bar'
 import { Separator } from '@/components/ui/separator'
 import { AppProvider } from '@/contexts'
 import { useAuthStore } from '@/stores/auth'
@@ -15,16 +16,20 @@ export function AppLayout() {
 
   return (
     <AppProvider>
-      <div className="flex h-screen w-full overflow-auto antialiased">
-        <Sidebar />
+      <div className="flex h-screen w-full flex-col overflow-auto antialiased">
+        <TitleBar />
 
-        <Separator orientation="vertical" />
+        <div className="flex flex-1">
+          <Sidebar />
 
-        <div className="flex flex-1 flex-col overflow-auto">
-          <Tabs />
+          <Separator orientation="vertical" />
 
-          <Separator orientation="horizontal" />
-          <Outlet />
+          <div className="flex flex-1 flex-col overflow-auto">
+            <Tabs />
+
+            <Separator orientation="horizontal" />
+            <Outlet />
+          </div>
         </div>
       </div>
     </AppProvider>

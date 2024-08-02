@@ -8,6 +8,7 @@ import {
 
 import LogoLight from '@/assets/logo-light.png'
 import { useTheme, type Theme } from '@/components/theme-provider'
+import { TitleBar } from '@/components/title-bar'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import {
   DropdownMenu,
@@ -50,6 +51,8 @@ export function InternalLayout() {
 
   return (
     <div className="flex h-screen w-full flex-col antialiased">
+      <TitleBar />
+
       <div className="flex items-center justify-between px-4 py-2">
         <Link to="/" replace>
           <img src={LogoLight} alt="Mocha" className="w-10" />
@@ -108,6 +111,7 @@ export function InternalLayout() {
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
+
       <Separator orientation="horizontal" />
 
       <Outlet />
