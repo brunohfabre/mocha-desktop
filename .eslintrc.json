@@ -1,0 +1,9 @@
+{
+  "extends": [
+    "@siakit/eslint-config/react",
+    "plugin:tailwindcss/recommended"
+  ],
+  "rules": {
+    "camelcase": "off"
+  }
+}
