@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 
 import { useAtom } from 'jotai'
-import { LoaderCircle, Plus } from 'lucide-react'
+import { Check, ChevronsUpDown, LoaderCircle, Plus } from 'lucide-react'
 
 import { Button } from '@/components/ui/button'
 import {
@@ -15,6 +15,7 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { Separator } from '@/components/ui/separator'
@@ -118,6 +119,10 @@ export function Sidebar() {
     } finally {
       setLoading(false)
     }
+  }
+
+  function handleNavigateToEnvironments() {
+    navigate(`/collections/${collectionId}/environments`)
   }
 
   const itemsToRender = collection?.requests.filter((item) => !item.parentId)
@@ -230,6 +235,31 @@ export function Sidebar() {
             </ContextMenuItem>
           </ContextMenuContent>
         </ContextMenu>
+
+        <Separator />
+
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <button className="flex h-[52px] items-center justify-between px-4 hover:bg-muted">
+              <span className="text-sm">No environment</span>
+
+              <ChevronsUpDown className="size-4 text-neutral-500" />
+            </button>
+          </DropdownMenuTrigger>
+
+          <DropdownMenuContent className="w-[calc(var(--radix-dropdown-menu-trigger-width)_-8px)]">
+            <DropdownMenuItem>No environment</DropdownMenuItem>
+
+            <DropdownMenuItem className="flex items-center justify-between bg-muted">
+              <span>Local</span>
+              <Check className="size-3" />
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem onClick={handleNavigateToEnvironments}>
+              Manage environments
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
     </>
   )

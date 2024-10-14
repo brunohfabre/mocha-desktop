@@ -7,6 +7,7 @@ import { Protected } from './components/layouts/protected'
 import { Collections } from './pages/collections'
 import { Collection } from './pages/collections/collection'
 import { CollectionRequest } from './pages/collections/collection/collection-request'
+import { Environments } from './pages/collections/collection/environments'
 import { CreateName } from './pages/create-name'
 import { Home } from './pages/home'
 import { NotFound } from './pages/not-found'
@@ -48,6 +49,10 @@ export const router = createBrowserRouter([
               {
                 path: 'requests/:requestId',
                 element: <CollectionRequest />,
+              },
+              {
+                path: 'environments',
+                element: <Environments />,
               },
             ],
           },

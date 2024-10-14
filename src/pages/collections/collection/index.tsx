@@ -1,4 +1,4 @@
-import { Outlet, useParams } from 'react-router-dom'
+import { Outlet, useLocation, useParams } from 'react-router-dom'
 
 import { LoaderCircle } from 'lucide-react'
 
@@ -14,6 +14,7 @@ export function Collection() {
     collectionId: string
     requestId: string
   }>()
+  const location = useLocation()
 
   const organization = useOrganizationStore((state) => state.organization)
 
@@ -44,7 +45,7 @@ export function Collection() {
 
       <Outlet />
 
-      {!requestId && (
+      {!location.pathname.includes('environments') && !requestId && (
         <div className="flex flex-1 items-center justify-center">
           <p className="text-sm">To start, select a request.</p>
         </div>
