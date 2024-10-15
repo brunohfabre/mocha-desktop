@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from 'react'
 import { Navigate, Outlet, useLocation, useNavigate } from 'react-router-dom'
 
-import LogoDark from '@/assets/logo-dark.png'
-import LogoLight from '@/assets/logo-light.png'
+import LogoDark from '@/assets/logo-dark.svg'
+import LogoLight from '@/assets/logo-light.svg'
 import { api } from '@/lib/api'
 import { useAuthStore } from '@/stores/auth-store'
 import { useOrganizationStore } from '@/stores/organization-store'

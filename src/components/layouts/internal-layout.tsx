@@ -2,8 +2,8 @@ import { Link, Outlet } from 'react-router-dom'
 
 import { LogOut } from 'lucide-react'
 
-import LogoDark from '@/assets/logo-dark.png'
-import LogoLight from '@/assets/logo-light.png'
+import LogoDark from '@/assets/logo-dark.svg'
+import LogoLight from '@/assets/logo-light.svg'
 import { useAuthStore } from '@/stores/auth-store'
 
 import { useTheme } from '../theme-provider'
