@@ -6,50 +6,40 @@ import { Input } from '@/components/ui/input'
 export function Environments() {
   const [environments, setEnvironments] = useState([
     {
-      id: crypto.randomUUID(),
+      id: 'env-1',
       name: 'Local',
     },
     {
-      id: crypto.randomUUID(),
+      id: 'env-2',
       name: 'Staging',
     },
     {
-      id: crypto.randomUUID(),
+      id: 'env-3',
       name: 'Production',
     },
   ])
   const [variables, setVariables] = useState([
     {
-      id: crypto.randomUUID(),
+      id: 'var-1',
       name: 'BASE_URL',
     },
     {
-      id: crypto.randomUUID(),
+      id: 'var-2',
       name: 'TOKEN',
     },
   ])
-  const [values, setValues] = useState([
-    {
-      environmentId: 'env-1',
-      variableId: 'var-1',
-      value: 'value-1',
-    },
-
-    {
-      environmentId: 'env-2',
-      variableId: 'var-2',
-      value: 'value-2',
-    },
-
-    {
-      environmentId: 'env-3',
-      variableId: 'var-1',
-      value: 'value-3',
-    },
-  ])
+  const [values, setValues] = useState<Record<string, string>>({
+    'env-1-var-1': 'value-1',
+  })
 
   function handleAddEnvironment() {
-    console.log('handle add environment')
+    setEnvironments((prevState) => [
+      ...prevState,
+      {
+        id: crypto.randomUUID(),
+        name: '',
+      },
+    ])
   }
 
   function handleAddVariable() {
@@ -62,28 +52,58 @@ export function Environments() {
     ])
   }
 
-  function handleChangeVariable(data: { variableId: string; value: string }) {
-    console.log('handle change variable', data)
+  function handleChangeVariable({
+    variableId,
+    value,
+  }: {
+    variableId: string
+    value: string
+  }) {
+    setVariables((prevState) =>
+      prevState.map((variable) =>
+        variable.id === variableId ? { ...variable, name: value } : variable,
+      ),
+    )
   }
 
-  function handleChangeEnvironment(data: {
+  function handleChangeEnvironment({
+    environmentId,
+    value,
+  }: {
     environmentId: string
     value: string
   }) {
-    console.log('handle change environment', data)
+    setEnvironments((prevState) =>
+      prevState.map((environment) =>
+        environment.id === environmentId
+          ? { ...environment, name: value }
+          : environment,
+      ),
+    )
   }
 
-  function handleChangeValue(data: any) {
-    console.log('handle change value', data)
+  function handleChangeValue({
+    environmentId,
+    variableId,
+    value,
+  }: {
+    environmentId: string
+    variableId: string
+    value: string
+  }) {
+    setValues((prevState) => ({
+      ...prevState,
+      [`${environmentId}-${variableId}`]: value,
+    }))
   }
 
   return (
-    <div className="flex flex-1 flex-col gap-4 p-4">
-      <header className="flex justify-between">
-        <p className="text-lg font-semibold">Environments</p>
+    <div className="flex flex-1 flex-col">
+      <header className="flex h-[52px] items-center px-4">
+        <p className="text-base font-medium">Environments</p>
       </header>
 
-      <table>
+      <table className="m-4">
         <thead>
           <tr>
             <td />
@@ -98,6 +118,7 @@ export function Environments() {
                       value: event.target.value,
                     })
                   }
+                  placeholder="Environment name"
                 />
               </td>
             ))}
@@ -128,6 +149,7 @@ export function Environments() {
               {environments.map((environment) => (
                 <td key={environment.id}>
                   <Input
+                    value={values[`${environment.id}-${variable.id}`] ?? ''}
                     onChange={(event) =>
                       handleChangeValue({
                         environmentId: environment.id,

@@ -183,13 +183,13 @@ export function Sidebar() {
 
         <ContextMenu>
           <ContextMenuTrigger asChild>
-            {collection?.requests.length ? (
+            {itemsToRender?.length ? (
               <div className="flex flex-1 flex-col p-2">
                 {itemsToRender?.map((item) => (
                   <Item
                     key={item.id}
                     item={item}
-                    items={collection.requests}
+                    items={collection?.requests ?? []}
                     createRequest={createRequest}
                     createFolder={(parentId = '') => {
                       setCreateFolderParentId(parentId)
