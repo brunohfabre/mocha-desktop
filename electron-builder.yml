@@ -37,6 +37,11 @@ linux:
 appImage:
   artifactName: ${name}-${version}.${ext}
 npmRebuild: false
+protocols:
+  name: Mocha
+  schemes:
+    - mocha-dev
+    - mocha
 publish:
   provider: generic
   url: https://example.com/auto-updates

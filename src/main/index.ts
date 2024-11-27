@@ -1,11 +1,25 @@
 import path from 'node:path'
-import { electronApp, optimizer } from '@electron-toolkit/utils'
-import { BrowserWindow, app, ipcMain, shell } from 'electron'
+import { electronApp, is, optimizer } from '@electron-toolkit/utils'
+import { BrowserWindow, app, dialog, ipcMain, shell } from 'electron'
 import icon from '../../resources/icon.png?asset'
 import { registerRoute } from '../lib/electron-router-dom'
 
+let mainWindow: BrowserWindow
+
+const protocol = is.dev ? 'mocha-dev' : 'mocha'
+
+if (process.defaultApp) {
+  if (process.argv.length >= 2) {
+    app.setAsDefaultProtocolClient(protocol, process.execPath, [
+      path.resolve(process.argv[1]),
+    ])
+  }
+} else {
+  app.setAsDefaultProtocolClient(protocol)
+}
+
 function createWindow(): void {
-  const mainWindow = new BrowserWindow({
+  mainWindow = new BrowserWindow({
     width: 1280,
     height: 800,
     show: false,
@@ -33,21 +47,44 @@ function createWindow(): void {
   })
 }
 
-app.whenReady().then(() => {
-  electronApp.setAppUserModelId('com.electron')
+const gotTheLock = app.requestSingleInstanceLock()
 
-  app.on('browser-window-created', (_, window) => {
-    optimizer.watchWindowShortcuts(window)
+if (!gotTheLock) {
+  app.quit()
+} else {
+  app.on('second-instance', (_, commandLine, __) => {
+    // Someone tried to run a second instance, we should focus our window.
+    if (mainWindow) {
+      if (mainWindow.isMinimized()) mainWindow.restore()
+      mainWindow.focus()
+    }
+    // the commandLine is array of strings in which last element is deep link url
+    dialog.showErrorBox(
+      'Welcome Back',
+      `You arrived from: ${commandLine.pop()}`
+    )
   })
 
-  ipcMain.on('ping', () => console.log('pong'))
+  app.whenReady().then(() => {
+    electronApp.setAppUserModelId('com.electron')
 
-  createWindow()
+    app.on('browser-window-created', (_, window) => {
+      optimizer.watchWindowShortcuts(window)
+    })
 
-  app.on('activate', () => {
-    if (BrowserWindow.getAllWindows().length === 0) createWindow()
+    ipcMain.on('ping', () => console.log('pong'))
+
+    createWindow()
+
+    app.on('activate', () => {
+      if (BrowserWindow.getAllWindows().length === 0) createWindow()
+    })
   })
-})
+
+  app.on('open-url', (_, url) => {
+    dialog.showErrorBox('Welcome Back', `You arrived from: ${url}`)
+  })
+}
 
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
