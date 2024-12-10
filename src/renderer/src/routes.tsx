@@ -1,5 +1,7 @@
 import { Route } from 'react-router-dom'
 import { Router } from '../../lib/electron-router-dom'
+import { AppLayout } from './components/_layouts/app-layout'
+import { AuthLayout } from './components/_layouts/auth-layout'
 import { Home } from './pages/home'
 import { SignIn } from './pages/sign-in'
 
@@ -8,8 +10,13 @@ export function AppRoutes() {
     <Router
       main={
         <>
-          <Route path="/" element={<Home />} />
-          <Route path="/sign-in" element={<SignIn />} />
+          <Route element={<AuthLayout />}>
+            <Route path="/sign-in" element={<SignIn />} />
+          </Route>
+
+          <Route element={<AppLayout />}>
+            <Route path="/" element={<Home />} />
+          </Route>
         </>
       }
     />

@@ -1,8 +1,10 @@
 import path from 'node:path'
 import { electronApp, is, optimizer } from '@electron-toolkit/utils'
-import { BrowserWindow, app, dialog, ipcMain, shell } from 'electron'
+import { BrowserWindow, app, dialog, shell } from 'electron'
 import icon from '../../resources/icon.png?asset'
 import { registerRoute } from '../lib/electron-router-dom'
+
+import './ipc'
 
 let mainWindow: BrowserWindow
 
@@ -23,6 +25,7 @@ function createWindow(): void {
     width: 1280,
     height: 800,
     show: false,
+    frame: false,
     autoHideMenuBar: true,
     ...(process.platform === 'linux' ? { icon } : {}),
     webPreferences: {
@@ -71,8 +74,6 @@ if (!gotTheLock) {
     app.on('browser-window-created', (_, window) => {
       optimizer.watchWindowShortcuts(window)
     })
-
-    ipcMain.on('ping', () => console.log('pong'))
 
     createWindow()
 
