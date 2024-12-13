@@ -14,7 +14,7 @@ export function AuthLayout() {
   return (
     <div className="h-screen w-full antialiased flex flex-col">
       <div className="region-drag flex h-[52px]">
-        {isMacOS && <div className="w-[92px] h-full bg-violet-300" />}
+        {isMacOS && <div className="w-[92px] h-full" />}
 
         <div className="flex-1" />
 
