@@ -1,4 +1,4 @@
-import { BrowserWindow, ipcMain } from 'electron'
+import { BrowserWindow, ipcMain, shell } from 'electron'
 
 ipcMain.on('window.minimize', (event) => {
   const browserWindow = BrowserWindow.fromWebContents(event.sender)
@@ -32,4 +32,8 @@ ipcMain.on('window.close', (event) => {
   }
 
   browserWindow.close()
+})
+
+ipcMain.on('openExternalUrl', (_, data) => {
+  shell.openExternal(data.url)
 })

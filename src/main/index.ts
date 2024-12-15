@@ -1,6 +1,6 @@
 import path from 'node:path'
 import { electronApp, is, optimizer } from '@electron-toolkit/utils'
-import { BrowserWindow, app, dialog, shell } from 'electron'
+import { BrowserWindow, app, shell } from 'electron'
 import icon from '../../resources/icon.png?asset'
 import { registerRoute } from '../lib/electron-router-dom'
 
@@ -66,11 +66,8 @@ if (!gotTheLock) {
       if (mainWindow.isMinimized()) mainWindow.restore()
       mainWindow.focus()
     }
-    // the commandLine is array of strings in which last element is deep link url
-    dialog.showErrorBox(
-      'Welcome Back',
-      `You arrived from: ${commandLine.pop()}`
-    )
+
+    mainWindow.webContents.send('deep-link', { url: commandLine.pop() })
   })
 
   app.whenReady().then(() => {
@@ -88,7 +85,7 @@ if (!gotTheLock) {
   })
 
   app.on('open-url', (_, url) => {
-    dialog.showErrorBox('Welcome Back', `You arrived from: ${url}`)
+    mainWindow.webContents.send('deep-link', { url })
   })
 }
 

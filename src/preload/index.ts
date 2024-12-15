@@ -18,6 +18,11 @@ export const api = {
       ipcRenderer.send('window.close')
     },
   },
+  openExternalUrl(url: string) {
+    ipcRenderer.send('openExternalUrl', { url })
+  },
+  onDeepLink: (callback) =>
+    ipcRenderer.on('deep-link', (_, data) => callback(data)),
 }
 
 if (process.contextIsolated) {
