@@ -66,7 +66,7 @@ export function AppLayout() {
 
       <div className="flex-1 flex">
         <aside className="w-[52px] flex flex-col">
-          <div className="bg-red-200 flex-1" />
+          <div className="flex-1" />
 
           <DropdownMenu>
             <DropdownMenuTrigger className="h-[52px] hover:bg-muted justify-center flex items-center">
