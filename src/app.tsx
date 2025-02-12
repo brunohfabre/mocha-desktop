@@ -1,6 +1,6 @@
 import { BrowserRouter } from 'react-router'
 
-import { Router } from './routes'
+import { Router } from './router'
 
 export function App() {
   return (

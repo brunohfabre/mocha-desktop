@@ -1,9 +1,16 @@
+import { useAuthStore } from '@/stores/auth'
 import type { UnlistenFn } from '@tauri-apps/api/event'
 import { onOpenUrl } from '@tauri-apps/plugin-deep-link'
 import { useEffect } from 'react'
-import { Outlet } from 'react-router'
+import { Navigate, Outlet } from 'react-router'
 
 export function AuthLayout() {
+  const token = useAuthStore(state => state.token)
+
+  if(token) {
+    return <Navigate to='/' replace />
+  }
+
   useEffect(() => {
     let sub: UnlistenFn
 
