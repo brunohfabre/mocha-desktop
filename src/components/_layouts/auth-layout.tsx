@@ -2,20 +2,26 @@ import { useAuthStore } from '@/stores/auth'
 import type { UnlistenFn } from '@tauri-apps/api/event'
 import { onOpenUrl } from '@tauri-apps/plugin-deep-link'
 import { useEffect } from 'react'
-import { Navigate, Outlet } from 'react-router'
+import { Navigate, Outlet, useNavigate } from 'react-router'
 
 export function AuthLayout() {
-  const token = useAuthStore(state => state.token)
+  const navigate = useNavigate()
 
-  if(token) {
-    return <Navigate to='/' replace />
-  }
+  const token = useAuthStore((state) => state.token)
 
   useEffect(() => {
     let sub: UnlistenFn
 
     onOpenUrl((urls) => {
-      console.log('deep link:', urls)
+      const url = new URL(urls[0])
+
+      const token = url.searchParams.get('token')
+
+      if (!token) {
+        return
+      }
+
+      navigate(`/auth/github/${token}`)
     }).then((unlistenFn) => {
       sub = unlistenFn
     })
@@ -25,16 +31,14 @@ export function AuthLayout() {
         sub()
       }
     }
-  }, [])
+  }, [navigate])
+
+  if (token) {
+    return <Navigate to="/" replace />
+  }
+
   return (
     <div className="h-screen flex flex-col antialiased">
-      <p>
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Minima, soluta.
-        Nobis ad sunt suscipit a minus ratione voluptatibus velit tempora,
-        assumenda quis ut culpa fuga nulla autem reprehenderit tempore
-        exercitationem!
-      </p>
-
       <Outlet />
     </div>
   )

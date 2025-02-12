@@ -1,5 +1,5 @@
 use tauri_plugin_deep_link::DeepLinkExt;
-use tauri::{AppHandle, Manager};
+use tauri::Manager;
 
 #[tauri::command]
 fn greet(name: &str) -> String {
