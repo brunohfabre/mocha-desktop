@@ -1,4 +1,5 @@
 use tauri_plugin_deep_link::DeepLinkExt;
+use tauri::{AppHandle, Manager};
 
 #[tauri::command]
 fn greet(name: &str) -> String {
@@ -12,8 +13,12 @@ pub fn run() {
 
     #[cfg(desktop)]
     {
-        builder = builder.plugin(tauri_plugin_single_instance::init(|_app, argv, _cwd| {
+        builder = builder.plugin(tauri_plugin_single_instance::init(|app, argv, _cwd| {
             println!("single instance triggered: {argv:?}");
+            
+            let _ = app.get_webview_window("main")
+                       .expect("no main window")
+                       .set_focus();
         }));
     }
 
