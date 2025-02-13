@@ -1,8 +1,11 @@
 import { TitleBar } from '@/components/title-bar'
 import { api } from '@/lib/api'
 import { useAuthStore } from '@/stores/auth'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { useEffect, useState } from 'react'
 import { Navigate, Outlet } from 'react-router'
+
+const queryClient = new QueryClient()
 
 export function AppLayout() {
   const token = useAuthStore((state) => state.token)
@@ -31,14 +34,16 @@ export function AppLayout() {
   }
 
   return (
-    <div className="h-screen flex flex-col antialiased">
-      <TitleBar />
+    <QueryClientProvider client={queryClient}>
+      <div className="h-screen flex flex-col antialiased">
+        <TitleBar />
 
-      <main className="flex-1 flex">
-        {/* <Sidebar /> */}
+        <main className="flex-1 flex">
+          {/* <Sidebar /> */}
 
-        <Outlet />
-      </main>
-    </div>
+          <Outlet />
+        </main>
+      </div>
+    </QueryClientProvider>
   )
 }
