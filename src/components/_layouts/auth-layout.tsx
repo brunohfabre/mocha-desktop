@@ -13,6 +13,8 @@ export function AuthLayout() {
     let sub: UnlistenFn
 
     onOpenUrl((urls) => {
+      console.log(urls)
+
       const url = new URL(urls[0])
 
       const token = url.searchParams.get('token')
