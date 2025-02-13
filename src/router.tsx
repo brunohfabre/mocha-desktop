@@ -4,6 +4,7 @@ import { AuthLayout } from './components/_layouts/auth-layout'
 
 import { AppLayout } from './components/_layouts/app-layout'
 import { GithubAuth } from './pages/auth/github'
+import { Collections } from './pages/collections'
 import { Home } from './pages/home'
 import { SignIn } from './pages/sign-in'
 
@@ -12,6 +13,8 @@ export function Router() {
     <Routes>
       <Route element={<AppLayout />}>
         <Route path="/" element={<Home />} />
+
+        <Route path="/collections" element={<Collections />} />
       </Route>
 
       <Route element={<AuthLayout />}>

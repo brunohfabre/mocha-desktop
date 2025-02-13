@@ -1,4 +1,3 @@
-use tauri_plugin_deep_link::DeepLinkExt;
 use tauri::Manager;
 
 #[tauri::command]
@@ -26,8 +25,11 @@ pub fn run() {
         .plugin(tauri_plugin_deep_link::init())
         .plugin(tauri_plugin_opener::init())
         .setup(|app| {
-            #[cfg(any(target_os = "linux", all(debug_assertions, windows)))]
-            app.deep_link().register_all()?;
+            #[cfg(any(windows, target_os = "linux"))]
+            {
+                use tauri_plugin_deep_link::DeepLinkExt;
+                app.deep_link().register_all()?;
+            }
 
             Ok(())
         })
