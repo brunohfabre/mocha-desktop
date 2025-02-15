@@ -3,7 +3,6 @@ import { env } from '@/env'
 import { Link } from 'react-router'
 
 export function SignIn() {
-
   return (
     <div className="flex-1 flex items-center justify-center">
       <Button type="button" asChild>

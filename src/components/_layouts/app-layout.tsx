@@ -2,15 +2,13 @@ import { TitleBar } from '@/components/title-bar'
 import { api } from '@/lib/api'
 import { useAuthStore } from '@/stores/auth'
 import { useOrganizationStore } from '@/stores/organization'
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { useEffect, useState } from 'react'
 import { Navigate, Outlet } from 'react-router'
-
-const queryClient = new QueryClient()
 
 export function AppLayout() {
   const token = useAuthStore((state) => state.token)
   const setCredentials = useAuthStore((state) => state.setCredentials)
+  const clearCredentials = useAuthStore((state) => state.clearCredentials)
 
   const selectOrganization = useOrganizationStore(
     (state) => state.selectOrganization
@@ -19,16 +17,23 @@ export function AppLayout() {
   const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
-    api.get('/profile').then((response) => {
-      setCredentials(response.data)
+    api
+      .get('/profile')
+      .then((response) => {
+        setCredentials(response.data)
 
-      api.get('/organizations').then((organizationsResponse) => {
-        selectOrganization(organizationsResponse.data.organizations[0].id)
+        api.get('/organizations').then((organizationsResponse) => {
+          selectOrganization(organizationsResponse.data.organizations[0].id)
 
-        setIsLoading(false)
+          setIsLoading(false)
+        })
       })
-    })
-  }, [setCredentials, selectOrganization])
+      .catch((error) => {
+        if (error.status === 401) {
+          clearCredentials()
+        }
+      })
+  }, [setCredentials, selectOrganization, clearCredentials])
 
   if (!token) {
     return <Navigate to="/sign-in" replace />
@@ -43,16 +48,14 @@ export function AppLayout() {
   }
 
   return (
-    <QueryClientProvider client={queryClient}>
-      <div className="h-screen flex flex-col antialiased">
-        <TitleBar />
+    <div className="h-screen flex flex-col antialiased">
+      <TitleBar />
 
-        <main className="flex-1 flex">
-          {/* <Sidebar /> */}
+      <main className="flex-1 flex">
+        {/* <Sidebar /> */}
 
-          <Outlet />
-        </main>
-      </div>
-    </QueryClientProvider>
+        <Outlet />
+      </main>
+    </div>
   )
 }

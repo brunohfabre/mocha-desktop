@@ -21,6 +21,7 @@ import { useQueryClient } from '@tanstack/react-query'
 import { Loader2 } from 'lucide-react'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
+import { Link, useNavigate } from 'react-router'
 import { toast } from 'sonner'
 import { z } from 'zod'
 
@@ -31,6 +32,8 @@ const createCollectionSchema = z.object({
 type CreateCollectionData = z.infer<typeof createCollectionSchema>
 
 export function Collections() {
+  const navigate = useNavigate()
+
   const queryClient = useQueryClient()
 
   const { mutateAsync: createCollection, isPending } = useCreateCollection()
@@ -56,7 +59,7 @@ export function Collections() {
     try {
       const { name } = data
 
-      await createCollection({
+      const response = await createCollection({
         organizationId: organizationSelected,
         data: {
           name,
@@ -67,7 +70,7 @@ export function Collections() {
         queryKey: getGetCollectionsQueryKey(organizationSelected),
       })
 
-      handleCloseModal()
+      navigate(`/collections/${response.collection.id}`)
     } catch {
       toast.error('Error on create collection')
     }
@@ -158,9 +161,13 @@ export function Collections() {
         ) : (
           <div className="grid grid-cols-3 p-4 gap-2">
             {data.collections.map((collection) => (
-              <div key={collection.id} className="p-4 border rounded-lg">
-                <p>{JSON.stringify(collection, null, 2)}</p>
-              </div>
+              <Link
+                key={collection.id}
+                to={`/collections/${collection.id}`}
+                className="p-4 border rounded-lg"
+              >
+                <p>{collection.name}</p>
+              </Link>
             ))}
           </div>
         )}

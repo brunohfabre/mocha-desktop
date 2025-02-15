@@ -78,6 +78,19 @@ export type CreateCollection200 = {
 /**
  * @nullable
  */
+export type GetCollection200Collection = {
+  id: string;
+  name: string;
+} | null;
+
+export type GetCollection200 = {
+  /** @nullable */
+  collection: GetCollection200Collection;
+};
+
+/**
+ * @nullable
+ */
 export type DeleteCollection201 = typeof DeleteCollection201[keyof typeof DeleteCollection201] | null;
 
 
@@ -85,6 +98,34 @@ export type DeleteCollection201 = typeof DeleteCollection201[keyof typeof Delete
 export const DeleteCollection201 = {
   null: 'null',
 } as const;
+
+export type GetRequests200RequestsItem = {
+  id: string;
+  name: string;
+  type: string;
+  /** @nullable */
+  method: string | null;
+  /** @nullable */
+  url: string | null;
+};
+
+export type GetRequests200 = {
+  requests: GetRequests200RequestsItem[];
+};
+
+export type CreateRequest200Request = {
+  id: string;
+  name: string;
+  type: string;
+  /** @nullable */
+  method: string | null;
+  /** @nullable */
+  url: string | null;
+};
+
+export type CreateRequest200 = {
+  request: CreateRequest200Request;
+};
 
 
 
@@ -516,6 +557,108 @@ export const useCreateCollection = <TError = unknown,
     }
     
 /**
+ * @summary Get collection
+ */
+export const getGetCollectionUrl = (organizationId: string,
+    collectionId: string,) => {
+
+
+  return `/organizations/${organizationId}/collections/${collectionId}`
+}
+
+export const getCollection = async (organizationId: string,
+    collectionId: string, options?: RequestInit): Promise<GetCollection200> => {
+  
+  return http<GetCollection200>(getGetCollectionUrl(organizationId,collectionId),
+  {      
+    ...options,
+    method: 'GET'
+    
+    
+  }
+);}
+
+
+
+export const getGetCollectionQueryKey = (organizationId: string,
+    collectionId: string,) => {
+    return [`/organizations/${organizationId}/collections/${collectionId}`] as const;
+    }
+
+    
+export const getGetCollectionQueryOptions = <TData = Awaited<ReturnType<typeof getCollection>>, TError = unknown>(organizationId: string,
+    collectionId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCollection>>, TError, TData>>, request?: SecondParameter<typeof http>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetCollectionQueryKey(organizationId,collectionId);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getCollection>>> = ({ signal }) => getCollection(organizationId,collectionId, { signal, ...requestOptions });
+
+      
+
+      
+
+   return  { queryKey, queryFn, enabled: !!(organizationId && collectionId), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getCollection>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetCollectionQueryResult = NonNullable<Awaited<ReturnType<typeof getCollection>>>
+export type GetCollectionQueryError = unknown
+
+
+export function useGetCollection<TData = Awaited<ReturnType<typeof getCollection>>, TError = unknown>(
+ organizationId: string,
+    collectionId: string, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCollection>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getCollection>>,
+          TError,
+          Awaited<ReturnType<typeof getCollection>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof http>}
+
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetCollection<TData = Awaited<ReturnType<typeof getCollection>>, TError = unknown>(
+ organizationId: string,
+    collectionId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCollection>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getCollection>>,
+          TError,
+          Awaited<ReturnType<typeof getCollection>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof http>}
+
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetCollection<TData = Awaited<ReturnType<typeof getCollection>>, TError = unknown>(
+ organizationId: string,
+    collectionId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCollection>>, TError, TData>>, request?: SecondParameter<typeof http>}
+
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Get collection
+ */
+
+export function useGetCollection<TData = Awaited<ReturnType<typeof getCollection>>, TError = unknown>(
+ organizationId: string,
+    collectionId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCollection>>, TError, TData>>, request?: SecondParameter<typeof http>}
+
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetCollectionQueryOptions(organizationId,collectionId,options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+
+/**
  * @summary Delete collection
  */
 export const getDeleteCollectionUrl = (organizationId: string,
@@ -582,6 +725,179 @@ export const useDeleteCollection = <TError = unknown,
       > => {
 
       const mutationOptions = getDeleteCollectionMutationOptions(options);
+
+      return useMutation(mutationOptions);
+    }
+    
+/**
+ * @summary Get requests
+ */
+export const getGetRequestsUrl = (organizationId: string,
+    collectionId: string,) => {
+
+
+  return `/organizations/${organizationId}/collections/${collectionId}/requests`
+}
+
+export const getRequests = async (organizationId: string,
+    collectionId: string, options?: RequestInit): Promise<GetRequests200> => {
+  
+  return http<GetRequests200>(getGetRequestsUrl(organizationId,collectionId),
+  {      
+    ...options,
+    method: 'GET'
+    
+    
+  }
+);}
+
+
+
+export const getGetRequestsQueryKey = (organizationId: string,
+    collectionId: string,) => {
+    return [`/organizations/${organizationId}/collections/${collectionId}/requests`] as const;
+    }
+
+    
+export const getGetRequestsQueryOptions = <TData = Awaited<ReturnType<typeof getRequests>>, TError = unknown>(organizationId: string,
+    collectionId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getRequests>>, TError, TData>>, request?: SecondParameter<typeof http>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetRequestsQueryKey(organizationId,collectionId);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getRequests>>> = ({ signal }) => getRequests(organizationId,collectionId, { signal, ...requestOptions });
+
+      
+
+      
+
+   return  { queryKey, queryFn, enabled: !!(organizationId && collectionId), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getRequests>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetRequestsQueryResult = NonNullable<Awaited<ReturnType<typeof getRequests>>>
+export type GetRequestsQueryError = unknown
+
+
+export function useGetRequests<TData = Awaited<ReturnType<typeof getRequests>>, TError = unknown>(
+ organizationId: string,
+    collectionId: string, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getRequests>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getRequests>>,
+          TError,
+          Awaited<ReturnType<typeof getRequests>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof http>}
+
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetRequests<TData = Awaited<ReturnType<typeof getRequests>>, TError = unknown>(
+ organizationId: string,
+    collectionId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getRequests>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getRequests>>,
+          TError,
+          Awaited<ReturnType<typeof getRequests>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof http>}
+
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetRequests<TData = Awaited<ReturnType<typeof getRequests>>, TError = unknown>(
+ organizationId: string,
+    collectionId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getRequests>>, TError, TData>>, request?: SecondParameter<typeof http>}
+
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Get requests
+ */
+
+export function useGetRequests<TData = Awaited<ReturnType<typeof getRequests>>, TError = unknown>(
+ organizationId: string,
+    collectionId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getRequests>>, TError, TData>>, request?: SecondParameter<typeof http>}
+
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetRequestsQueryOptions(organizationId,collectionId,options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+
+/**
+ * @summary Create request
+ */
+export const getCreateRequestUrl = (organizationId: string,
+    collectionId: string,) => {
+
+
+  return `/organizations/${organizationId}/collections/${collectionId}/requests`
+}
+
+export const createRequest = async (organizationId: string,
+    collectionId: string, options?: RequestInit): Promise<CreateRequest200> => {
+  
+  return http<CreateRequest200>(getCreateRequestUrl(organizationId,collectionId),
+  {      
+    ...options,
+    method: 'POST'
+    
+    
+  }
+);}
+
+
+
+
+export const getCreateRequestMutationOptions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createRequest>>, TError,{organizationId: string;collectionId: string}, TContext>, request?: SecondParameter<typeof http>}
+): UseMutationOptions<Awaited<ReturnType<typeof createRequest>>, TError,{organizationId: string;collectionId: string}, TContext> => {
+    
+const mutationKey = ['createRequest'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof createRequest>>, {organizationId: string;collectionId: string}> = (props) => {
+          const {organizationId,collectionId} = props ?? {};
+
+          return  createRequest(organizationId,collectionId,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type CreateRequestMutationResult = NonNullable<Awaited<ReturnType<typeof createRequest>>>
+    
+    export type CreateRequestMutationError = unknown
+
+    /**
+ * @summary Create request
+ */
+export const useCreateRequest = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createRequest>>, TError,{organizationId: string;collectionId: string}, TContext>, request?: SecondParameter<typeof http>}
+): UseMutationResult<
+        Awaited<ReturnType<typeof createRequest>>,
+        TError,
+        {organizationId: string;collectionId: string},
+        TContext
+      > => {
+
+      const mutationOptions = getCreateRequestMutationOptions(options);
 
       return useMutation(mutationOptions);
     }
