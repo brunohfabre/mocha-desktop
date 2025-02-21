@@ -99,6 +99,24 @@ export const DeleteCollection201 = {
   null: 'null',
 } as const;
 
+export type GetRequests200RequestsItemBodyType = typeof GetRequests200RequestsItemBodyType[keyof typeof GetRequests200RequestsItemBodyType];
+
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const GetRequests200RequestsItemBodyType = {
+  NONE: 'NONE',
+  JSON: 'JSON',
+} as const;
+
+export type GetRequests200RequestsItemAuthType = typeof GetRequests200RequestsItemAuthType[keyof typeof GetRequests200RequestsItemAuthType];
+
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const GetRequests200RequestsItemAuthType = {
+  NONE: 'NONE',
+  BEARER: 'BEARER',
+} as const;
+
 export type GetRequests200RequestsItem = {
   id: string;
   name: string;
@@ -107,6 +125,16 @@ export type GetRequests200RequestsItem = {
   method: string | null;
   /** @nullable */
   url: string | null;
+  bodyType: GetRequests200RequestsItemBodyType;
+  /** @nullable */
+  body: string | null;
+  authType: GetRequests200RequestsItemAuthType;
+  /** @nullable */
+  auth: string | null;
+  headers: string[];
+  params: string[];
+  /** @nullable */
+  parentId: string | null;
 };
 
 export type GetRequests200 = {
@@ -125,6 +153,106 @@ export type CreateRequest200Request = {
 
 export type CreateRequest200 = {
   request: CreateRequest200Request;
+};
+
+export type UpdateRequestBodyMethod = typeof UpdateRequestBodyMethod[keyof typeof UpdateRequestBodyMethod];
+
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const UpdateRequestBodyMethod = {
+  GET: 'GET',
+  POST: 'POST',
+  PUT: 'PUT',
+  PATCH: 'PATCH',
+  DELETE: 'DELETE',
+} as const;
+
+export type UpdateRequestBodyBodyType = typeof UpdateRequestBodyBodyType[keyof typeof UpdateRequestBodyBodyType];
+
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const UpdateRequestBodyBodyType = {
+  NONE: 'NONE',
+  JSON: 'JSON',
+} as const;
+
+export type UpdateRequestBodyAuthType = typeof UpdateRequestBodyAuthType[keyof typeof UpdateRequestBodyAuthType];
+
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const UpdateRequestBodyAuthType = {
+  NONE: 'NONE',
+  BEARER: 'BEARER',
+} as const;
+
+export type UpdateRequestBody = {
+  name?: string;
+  method?: UpdateRequestBodyMethod;
+  url?: string;
+  bodyType?: UpdateRequestBodyBodyType;
+  body?: string;
+  authType?: UpdateRequestBodyAuthType;
+  auth?: string;
+  headers?: string[];
+  params?: string[];
+  parentId?: string;
+};
+
+/**
+ * @nullable
+ */
+export type UpdateRequest200RequestMethod = typeof UpdateRequest200RequestMethod[keyof typeof UpdateRequest200RequestMethod] | null;
+
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const UpdateRequest200RequestMethod = {
+  GET: 'GET',
+  POST: 'POST',
+  PUT: 'PUT',
+  PATCH: 'PATCH',
+  DELETE: 'DELETE',
+} as const;
+
+export type UpdateRequest200RequestBodyType = typeof UpdateRequest200RequestBodyType[keyof typeof UpdateRequest200RequestBodyType];
+
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const UpdateRequest200RequestBodyType = {
+  NONE: 'NONE',
+  JSON: 'JSON',
+} as const;
+
+export type UpdateRequest200RequestAuthType = typeof UpdateRequest200RequestAuthType[keyof typeof UpdateRequest200RequestAuthType];
+
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const UpdateRequest200RequestAuthType = {
+  NONE: 'NONE',
+  BEARER: 'BEARER',
+} as const;
+
+export type UpdateRequest200Request = {
+  id: string;
+  name: string;
+  type: string;
+  /** @nullable */
+  method: UpdateRequest200RequestMethod;
+  /** @nullable */
+  url: string | null;
+  bodyType: UpdateRequest200RequestBodyType;
+  /** @nullable */
+  body: string | null;
+  authType: UpdateRequest200RequestAuthType;
+  /** @nullable */
+  auth: string | null;
+  headers: string[];
+  params: string[];
+  /** @nullable */
+  parentId: string | null;
+};
+
+export type UpdateRequest200 = {
+  request: UpdateRequest200Request;
 };
 
 
@@ -898,6 +1026,81 @@ export const useCreateRequest = <TError = unknown,
       > => {
 
       const mutationOptions = getCreateRequestMutationOptions(options);
+
+      return useMutation(mutationOptions);
+    }
+    
+/**
+ * @summary Update request
+ */
+export const getUpdateRequestUrl = (organizationId: string,
+    collectionId: string,
+    requestId: string,) => {
+
+
+  return `/organizations/${organizationId}/collections/${collectionId}/requests/${requestId}`
+}
+
+export const updateRequest = async (organizationId: string,
+    collectionId: string,
+    requestId: string,
+    updateRequestBody: UpdateRequestBody, options?: RequestInit): Promise<UpdateRequest200> => {
+  
+  return http<UpdateRequest200>(getUpdateRequestUrl(organizationId,collectionId,requestId),
+  {      
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      updateRequestBody,)
+  }
+);}
+
+
+
+
+export const getUpdateRequestMutationOptions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateRequest>>, TError,{organizationId: string;collectionId: string;requestId: string;data: UpdateRequestBody}, TContext>, request?: SecondParameter<typeof http>}
+): UseMutationOptions<Awaited<ReturnType<typeof updateRequest>>, TError,{organizationId: string;collectionId: string;requestId: string;data: UpdateRequestBody}, TContext> => {
+    
+const mutationKey = ['updateRequest'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof updateRequest>>, {organizationId: string;collectionId: string;requestId: string;data: UpdateRequestBody}> = (props) => {
+          const {organizationId,collectionId,requestId,data} = props ?? {};
+
+          return  updateRequest(organizationId,collectionId,requestId,data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type UpdateRequestMutationResult = NonNullable<Awaited<ReturnType<typeof updateRequest>>>
+    export type UpdateRequestMutationBody = UpdateRequestBody
+    export type UpdateRequestMutationError = unknown
+
+    /**
+ * @summary Update request
+ */
+export const useUpdateRequest = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateRequest>>, TError,{organizationId: string;collectionId: string;requestId: string;data: UpdateRequestBody}, TContext>, request?: SecondParameter<typeof http>}
+): UseMutationResult<
+        Awaited<ReturnType<typeof updateRequest>>,
+        TError,
+        {organizationId: string;collectionId: string;requestId: string;data: UpdateRequestBody},
+        TContext
+      > => {
+
+      const mutationOptions = getUpdateRequestMutationOptions(options);
 
       return useMutation(mutationOptions);
     }

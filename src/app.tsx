@@ -13,7 +13,7 @@ export function App() {
         <Router />
       </BrowserRouter>
 
-      <Toaster />
+      <Toaster position="top-right" />
     </QueryClientProvider>
   )
 }
