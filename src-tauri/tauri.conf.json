@@ -35,7 +35,7 @@
   },
   "plugins": {
     "updater": {
-      "pubkey": "CONTENT FROM PUBLICKEY.PEM",
+      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IDU0MTA4MUU4NzA3QjhDQzQKUldURWpIdHc2SUVRVkdPcFoxWEl2T2c5VUx2ZUFXdUVEOElGUzFyY0JFRVhuL29FQkExTm1OMGEK",
       "endpoints": ["https://mocha.coddee.co/releases/latest"]
     }
   }
