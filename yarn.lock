@@ -650,6 +650,20 @@
   dependencies:
     "@tauri-apps/api" "^2.0.0"
 
+"@tauri-apps/plugin-process@~2":
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/@tauri-apps/plugin-process/-/plugin-process-2.2.0.tgz#e9f9b510374250967d2ba7d343a08c9024bdd473"
+  integrity sha512-uypN2Crmyop9z+KRJr3zl71OyVFgTuvHFjsJ0UxxQ/J5212jVa5w4nPEYjIewcn8bUEXacRebwE6F7owgrbhSw==
+  dependencies:
+    "@tauri-apps/api" "^2.0.0"
+
+"@tauri-apps/plugin-updater@~2":
+  version "2.6.1"
+  resolved "https://registry.yarnpkg.com/@tauri-apps/plugin-updater/-/plugin-updater-2.6.1.tgz#ce6665c1ab77fff96092283702dbe2777c3b295d"
+  integrity sha512-iiOevw4kc12Ok99J9KthXwUqwPv1sYjG+tNEDZqPmwvOmIq7s58nKMRz6NJPKXT4U16NzMPffFcP/LUOsz6c4A==
+  dependencies:
+    "@tauri-apps/api" "^2.0.0"
+
 "@types/babel__core@^7.20.5":
   version "7.20.5"
   resolved "https://registry.yarnpkg.com/@types/babel__core/-/babel__core-7.20.5.tgz#3df15f27ba85319caa07ba08d0721889bb39c017"
