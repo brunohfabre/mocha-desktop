@@ -7,39 +7,45 @@ import { AppRoutes } from './routes'
 
 export function App() {
   const [appIsReady, setAppIsReady] = useState(false)
+  const [result, setResult] = useState('')
 
   useEffect(() => {
     async function prepare() {
       try {
         const update = await check()
 
+        console.log(update)
+
         if (update) {
-          console.log(
+          setResult(
             `found update ${update.version} from ${update.date} with notes ${update.body}`
           )
+
           let downloaded = 0
           let contentLength: number | undefined = 0
-          // alternatively we could also call update.download() and update.install() separately
+
           await update.downloadAndInstall((event) => {
             switch (event.event) {
               case 'Started':
                 contentLength = event.data.contentLength
 
-                console.log(
+                setResult(
                   `started downloading ${event.data.contentLength} bytes`
                 )
                 break
               case 'Progress':
                 downloaded += event.data.chunkLength
-                console.log(`downloaded ${downloaded} from ${contentLength}`)
+
+                setResult(`downloaded ${downloaded} from ${contentLength}`)
                 break
               case 'Finished':
-                console.log('download finished')
+                setResult('download finished')
+
                 break
             }
           })
 
-          console.log('update installed')
+          setResult('update installed')
 
           await relaunch()
         }
@@ -54,7 +60,7 @@ export function App() {
   if (!appIsReady) {
     return (
       <div className="h-screen flex items-center justify-center antialiased">
-        <span>verify update</span>
+        <span>{JSON.stringify(result, null, 2)}</span>
       </div>
     )
   }
