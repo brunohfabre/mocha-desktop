@@ -12,7 +12,7 @@
   "app": {
     "windows": [
       {
-        "title": "mocha-desktop",
+        "title": "Mocha",
         "width": 1280,
         "height": 800
       }
