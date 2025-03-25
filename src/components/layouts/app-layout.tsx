@@ -9,7 +9,7 @@ export function AppLayout() {
   }
 
   return (
-    <div className="h-screen antialiased">
+    <div className="h-screen antialiased flex">
       <Outlet />
     </div>
   )
