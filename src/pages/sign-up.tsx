@@ -56,6 +56,7 @@ export function SignUp() {
             <Input
               id="name"
               placeholder="John Doe"
+              aria-invalid={!!signUpForm.formState.errors.name?.message}
               {...signUpForm.register('name')}
             />
             {signUpForm.formState.errors.name?.message && (
@@ -70,6 +71,7 @@ export function SignUp() {
             <Input
               id="email"
               placeholder="johndoe@acme.com"
+              aria-invalid={!!signUpForm.formState.errors.email?.message}
               {...signUpForm.register('email')}
             />
             {signUpForm.formState.errors.email?.message && (

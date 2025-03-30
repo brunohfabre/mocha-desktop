@@ -53,6 +53,7 @@ export function SignIn() {
           <Input
             id="email"
             placeholder="johndoe@acme.com"
+            aria-invalid={!!signInForm.formState.errors.email?.message}
             {...signInForm.register('email')}
           />
           {signInForm.formState.errors.email?.message && (
