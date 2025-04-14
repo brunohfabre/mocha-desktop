@@ -10,15 +10,6 @@
     "frontendDist": "../dist"
   },
   "app": {
-    "windows": [
-      {
-        "title": "Mocha",
-        "width": 1280,
-        "height": 800,
-        "minHeight": 400,
-        "minWidth": 300
-      }
-    ],
     "security": {
       "csp": null
     }

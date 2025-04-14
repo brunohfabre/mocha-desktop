@@ -3,6 +3,7 @@ import { check } from '@tauri-apps/plugin-updater'
 import { useEffect, useState } from 'react'
 import { BrowserRouter } from 'react-router'
 
+import { TitleBar } from './components/title-bar'
 import { AppRoutes } from './routes'
 
 export function App() {
@@ -59,8 +60,12 @@ export function App() {
 
   if (!appIsReady) {
     return (
-      <div className="h-screen flex items-center justify-center antialiased">
-        <span>{JSON.stringify(result, null, 2)}</span>
+      <div className="h-screen flex flex-col antialiased">
+        <TitleBar />
+
+        <div className="flex-1 flex items-center justify-center">
+          <span>{JSON.stringify(result, null, 2)}</span>
+        </div>
       </div>
     )
   }

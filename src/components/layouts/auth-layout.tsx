@@ -1,5 +1,6 @@
 import { useAuthStore } from '@/stores/auth-store'
 import { Navigate, Outlet } from 'react-router'
+import { TitleBar } from '../title-bar'
 
 export function AuthLayout() {
   const token = useAuthStore((state) => state.token)
@@ -9,7 +10,9 @@ export function AuthLayout() {
   }
 
   return (
-    <div className="h-screen antialiased flex">
+    <div className="h-screen antialiased flex flex-col">
+      <TitleBar />
+
       <Outlet />
     </div>
   )
