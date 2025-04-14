@@ -34,7 +34,7 @@ export function SignIn() {
   }
 
   return (
-    <div className="flex flex-col justify-center flex-1 mx-auto max-w-sm gap-8">
+    <div className="flex flex-col justify-center flex-1 mx-auto max-w-sm w-full gap-8">
       <img src={LogoBlack} alt="Mocha" className="w-12" />
 
       <div className="gap-1">
