@@ -1,14 +1,7 @@
 import { Button } from '@/components/ui/button'
 import { useAuthStore } from '@/stores/auth-store'
 import { getShortName } from '@/utils/get-short-name'
-import {
-  BadgeCheck,
-  Bell,
-  Command,
-  CreditCard,
-  LogOut,
-  User,
-} from 'lucide-react'
+import { Bell, Command, LogOut, User } from 'lucide-react'
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar'
 import {
   DropdownMenu,
@@ -91,7 +84,7 @@ export function Sidebar() {
                 </DropdownMenuGroup>
                 <DropdownMenuSeparator />
 
-                <DropdownMenuItem>
+                <DropdownMenuItem onClick={signOut}>
                   <LogOut className="text-foreground" />
                   Log out
                 </DropdownMenuItem>
