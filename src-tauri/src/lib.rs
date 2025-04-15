@@ -44,8 +44,8 @@ pub fn run() {
 
                 let handle = window.ns_window().unwrap() as cocoa::base::id;
 
-                let x: f64 = f64;
-                let y: f64 = f64;
+                let x: f64 = 40.0;
+                let y: f64 = 32.0;
 
                 unsafe {
                     NSWindow::setAppearance(handle, NSAppearance(NSAppearanceNameVibrantLight));
