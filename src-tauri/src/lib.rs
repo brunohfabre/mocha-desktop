@@ -37,12 +37,41 @@ pub fn run() {
             // set background color only when building for macOS
             #[cfg(target_os = "macos")]
             {
-                use cocoa::appkit::{NSAppearance, NSAppearanceNameVibrantLight, NSWindow};
+                use cocoa::appkit::{
+                    NSAppearance, NSAppearanceNameVibrantLight, NSView, NSWindow, NSWindowButton,
+                };
+                use cocoa::foundation::NSRect;
 
                 let handle = window.ns_window().unwrap() as cocoa::base::id;
 
+                let x: f64 = f64;
+                let y: f64 = f64;
+
                 unsafe {
                     NSWindow::setAppearance(handle, NSAppearance(NSAppearanceNameVibrantLight));
+
+                    let close = handle.standardWindowButton_(NSWindowButton::NSWindowCloseButton);
+                    let miniaturize =
+                        handle.standardWindowButton_(NSWindowButton::NSWindowMiniaturizeButton);
+                    let zoom = handle.standardWindowButton_(NSWindowButton::NSWindowZoomButton);
+
+                    let title_bar_container_view = close.superview().superview();
+
+                    let title_bar_frame_height = y;
+                    let mut title_bar_rect = NSView::frame(title_bar_container_view);
+                    title_bar_rect.size.height = title_bar_frame_height;
+                    title_bar_rect.origin.y =
+                        NSView::frame(handle).size.height - title_bar_frame_height;
+
+                    let window_buttons = vec![close, miniaturize, zoom];
+                    let space_between =
+                        NSView::frame(miniaturize).origin.x - NSView::frame(close).origin.x;
+
+                    for (i, button) in window_buttons.into_iter().enumerate() {
+                        let mut rect: NSRect = NSView::frame(button);
+                        rect.origin.x = x + (i as f64 * space_between);
+                        button.setFrameOrigin(rect.origin);
+                    }
                 }
             }
 
