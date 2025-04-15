@@ -41,11 +41,12 @@ pub fn run() {
                     NSAppearance, NSAppearanceNameVibrantLight, NSView, NSWindow, NSWindowButton,
                 };
                 use cocoa::foundation::NSRect;
+                use objc::{msg_send, sel, sel_impl};
 
                 let handle = window.ns_window().unwrap() as cocoa::base::id;
 
-                let x: f64 = 40.0;
-                let y: f64 = 32.0;
+                let x: f64 = 19.0;
+                let y: f64 = 24.0;
 
                 unsafe {
                     NSWindow::setAppearance(handle, NSAppearance(NSAppearanceNameVibrantLight));
@@ -57,15 +58,17 @@ pub fn run() {
 
                     let title_bar_container_view = close.superview().superview();
 
-                    let title_bar_frame_height = y;
+                    let close_rect: NSRect = msg_send![close, frame];
+                    let button_height = close_rect.size.height;
+
+                    let title_bar_frame_height = button_height + y;
                     let mut title_bar_rect = NSView::frame(title_bar_container_view);
                     title_bar_rect.size.height = title_bar_frame_height;
-                    title_bar_rect.origin.y =
-                        NSView::frame(handle).size.height - title_bar_frame_height;
+                    title_bar_rect.origin.y = NSView::frame(handle).size.height - title_bar_frame_height;
+                    let _: () = msg_send![title_bar_container_view, setFrame: title_bar_rect];
 
                     let window_buttons = vec![close, miniaturize, zoom];
-                    let space_between =
-                        NSView::frame(miniaturize).origin.x - NSView::frame(close).origin.x;
+                    let space_between = NSView::frame(miniaturize).origin.x - NSView::frame(close).origin.x;
 
                     for (i, button) in window_buttons.into_iter().enumerate() {
                         let mut rect: NSRect = NSView::frame(button);

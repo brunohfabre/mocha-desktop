@@ -30,7 +30,7 @@ export function Sidebar() {
   const shortName = getShortName(user?.name ?? '')
 
   return (
-    <aside className="w-[52px] flex flex-col p-2 justify-between">
+    <aside className="w-[52px] flex flex-col px-2 pb-4 justify-between">
       <Button size="icon">
         <Command />
       </Button>

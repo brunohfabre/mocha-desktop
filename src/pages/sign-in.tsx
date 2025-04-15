@@ -24,11 +24,11 @@ export function SignIn() {
 
   function signIn() {
     setCredentials({
-      token: 'asdasd',
+      token: 'token-token',
       user: {
         id: crypto.randomUUID(),
-        name: 'Bruno Fabre',
-        email: 'bruno.hfabre@gmail.com',
+        name: 'John Doe',
+        email: 'johndoe@email.com',
       },
     })
   }
