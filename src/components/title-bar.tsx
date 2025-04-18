@@ -1,11 +1,23 @@
-import { useAuthStore } from '@/stores/auth-store'
+import { getCurrentWindow } from '@tauri-apps/api/window'
 import { platform } from '@tauri-apps/plugin-os'
 import { House, Search } from 'lucide-react'
 import { Button } from './ui/button'
 import { Separator } from './ui/separator'
 
-export function TitleBar() {
-  const token = useAuthStore((state) => state.token)
+import CloseIcon from '@/assets/icons/close.svg'
+import MaximizeIcon from '@/assets/icons/maximize.svg'
+import MinimizeIcon from '@/assets/icons/minimize.svg'
+import RestoreIcon from '@/assets/icons/restore.svg'
+import { useState } from 'react'
+
+const appWindow = getCurrentWindow()
+
+interface TitleBarProps {
+  showButtons?: boolean
+}
+
+export function TitleBar({ showButtons = true }: TitleBarProps) {
+  const [isMaximized, setIsMaximized] = useState(false)
 
   const isMacos = platform() === 'macos'
 
@@ -14,7 +26,7 @@ export function TitleBar() {
       {isMacos && <div className="h-[52px] w-[92px]" data-tauri-drag-region />}
 
       <div className="flex-1 flex" data-tauri-drag-region>
-        {!!token && (
+        {!!showButtons && (
           <>
             <div className="p-2 pl-0">
               <Button size="icon" variant="outline">
@@ -41,7 +53,53 @@ export function TitleBar() {
         )}
       </div>
 
-      {!isMacos && <div className="bg-green-500 w-32" />}
+      {!isMacos && (
+        <div className="flex">
+          <button
+            type="button"
+            className="px-4 cursor-pointer hover:bg-muted"
+            onClick={() => appWindow.minimize()}
+          >
+            <img src={MinimizeIcon} alt="" />
+          </button>
+
+          {!isMaximized && (
+            <button
+              type="button"
+              className="px-4 cursor-pointer hover:bg-muted"
+              onClick={() => {
+                appWindow.toggleMaximize()
+
+                setIsMaximized((prevState) => !prevState)
+              }}
+            >
+              <img src={MaximizeIcon} alt="" />
+            </button>
+          )}
+
+          {isMaximized && (
+            <button
+              type="button"
+              className="px-4 cursor-pointer hover:bg-muted"
+              onClick={() => {
+                appWindow.toggleMaximize()
+
+                setIsMaximized((prevState) => !prevState)
+              }}
+            >
+              <img src={RestoreIcon} alt="" />
+            </button>
+          )}
+
+          <button
+            type="button"
+            className="px-4 cursor-pointer hover:bg-destructive group"
+            onClick={() => appWindow.close()}
+          >
+            <img src={CloseIcon} alt="" className="group-hover:invert" />
+          </button>
+        </div>
+      )}
     </div>
   )
 }

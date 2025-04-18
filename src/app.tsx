@@ -6,9 +6,12 @@ import { BrowserRouter } from 'react-router'
 import { TitleBar } from './components/title-bar'
 import { AppRoutes } from './routes'
 
+type Step = 'looking' | 'started' | 'downloading' | 'finished'
+
 export function App() {
   const [appIsReady, setAppIsReady] = useState(false)
-  const [result, setResult] = useState('')
+  const [step, setStep] = useState<Step>('looking')
+  const [progress, setProgress] = useState(37)
 
   useEffect(() => {
     async function prepare() {
@@ -18,35 +21,31 @@ export function App() {
         console.log(update)
 
         if (update) {
-          setResult(
-            `found update ${update.version} from ${update.date} with notes ${update.body}`
-          )
-
           let downloaded = 0
-          let contentLength: number | undefined = 0
+          let contentLength = 0
 
           await update.downloadAndInstall((event) => {
             switch (event.event) {
               case 'Started':
-                contentLength = event.data.contentLength
+                contentLength = event.data.contentLength ?? 0
 
-                setResult(
-                  `started downloading ${event.data.contentLength} bytes`
-                )
+                setStep('started')
+
                 break
               case 'Progress':
                 downloaded += event.data.chunkLength
 
-                setResult(`downloaded ${downloaded} from ${contentLength}`)
+                setStep('downloading')
+
+                setProgress(Math.round((downloaded / contentLength) * 100))
+
                 break
               case 'Finished':
-                setResult('download finished')
+                setStep('finished')
 
                 break
             }
           })
-
-          setResult('update installed')
 
           await relaunch()
         }
@@ -61,10 +60,19 @@ export function App() {
   if (!appIsReady) {
     return (
       <div className="h-screen flex flex-col antialiased">
-        <TitleBar />
+        <TitleBar showButtons={false} />
 
-        <div className="flex-1 flex items-center justify-center">
-          <span>{JSON.stringify(result, null, 2)}</span>
+        <div className="flex-1 flex flex-col items-center justify-center gap-4">
+          {step}
+
+          {step === 'downloading' && (
+            <div className="h-4 w-60 bg-zinc-300">
+              <div
+                className="bg-zinc-400 h-full"
+                style={{ width: `${progress}%` }}
+              />
+            </div>
+          )}
         </div>
       </div>
     )

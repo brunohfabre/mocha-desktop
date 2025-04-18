@@ -11,7 +11,7 @@ export function AuthLayout() {
 
   return (
     <div className="h-screen antialiased flex flex-col">
-      <TitleBar />
+      <TitleBar showButtons={false} />
 
       <Outlet />
     </div>
