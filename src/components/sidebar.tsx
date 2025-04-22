@@ -1,7 +1,16 @@
 import { Button } from '@/components/ui/button'
 import { useAuthStore } from '@/stores/auth-store'
 import { getShortName } from '@/utils/get-short-name'
-import { Bell, Command, LogOut, User } from 'lucide-react'
+import {
+  Bell,
+  Database,
+  House,
+  LockKeyhole,
+  LogOut,
+  Notebook,
+  StickyNote,
+  User,
+} from 'lucide-react'
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar'
 import {
   DropdownMenu,
@@ -30,11 +39,28 @@ export function Sidebar() {
   const shortName = getShortName(user?.name ?? '')
 
   return (
-    <aside className="w-[52px] flex flex-col px-2 pb-4 justify-between">
-      <Button size="icon">
-        <Command />
-      </Button>
+    <aside className="w-[52px] flex flex-col p-2 justify-between">
+      <div className="gap-1 flex flex-col">
+        <Button size="icon" variant="secondary">
+          <House />
+        </Button>
 
+        <Button size="icon" variant="ghost">
+          <Notebook />
+        </Button>
+
+        <Button size="icon" variant="ghost" disabled>
+          <StickyNote />
+        </Button>
+
+        <Button size="icon" variant="ghost" disabled>
+          <Database />
+        </Button>
+
+        <Button size="icon" variant="ghost" disabled>
+          <LockKeyhole />
+        </Button>
+      </div>
       <div className="flex-1" />
 
       <TooltipProvider>
@@ -47,6 +73,7 @@ export function Sidebar() {
                   <AvatarFallback>{shortName}</AvatarFallback>
                 </Avatar>
               </DropdownMenuTrigger>
+
               <DropdownMenuContent
                 className="min-w-56"
                 side="right"

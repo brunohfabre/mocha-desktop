@@ -1,8 +1,5 @@
 import { getCurrentWindow } from '@tauri-apps/api/window'
 import { platform } from '@tauri-apps/plugin-os'
-import { House, Search } from 'lucide-react'
-import { Button } from './ui/button'
-import { Separator } from './ui/separator'
 
 import CloseIcon from '@/assets/icons/close.svg'
 import MaximizeIcon from '@/assets/icons/maximize.svg'
@@ -25,30 +22,16 @@ export function TitleBar({ showButtons = true }: TitleBarProps) {
     <div className="h-[52px] flex">
       {isMacos && <div className="h-[52px] w-[92px]" data-tauri-drag-region />}
 
-      <div className="flex-1 flex" data-tauri-drag-region>
+      <div className="flex-1 flex">
         {!!showButtons && (
           <>
-            <div className="p-2 pl-0">
-              <Button size="icon" variant="outline">
-                <House size={16} />
-              </Button>
-            </div>
-
-            <div className="py-4">
-              <Separator orientation="vertical" />
-            </div>
-
             <div className="flex-1" data-tauri-drag-region />
 
-            <div className="py-4">
-              <Separator orientation="vertical" />
-            </div>
-
-            <div className="p-2">
+            {/* <div className="p-2">
               <Button size="icon" variant="outline">
                 <Search size={16} />
               </Button>
-            </div>
+            </div> */}
           </>
         )}
       </div>

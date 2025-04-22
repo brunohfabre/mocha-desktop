@@ -2,6 +2,7 @@ import { useAuthStore } from '@/stores/auth-store'
 import { Navigate, Outlet } from 'react-router'
 import { Sidebar } from '../sidebar'
 import { TitleBar } from '../title-bar'
+import { Separator } from '../ui/separator'
 
 export function AppLayout() {
   const token = useAuthStore((state) => state.token)
@@ -11,15 +12,17 @@ export function AppLayout() {
   }
 
   return (
-    <div className="h-screen antialiased flex flex-col bg-sidebar">
+    <div className="h-screen antialiased flex flex-col">
       <TitleBar />
+
+      <Separator orientation="horizontal" />
 
       <main className="flex flex-1">
         <Sidebar />
 
-        <div className="flex flex-col flex-1 mb-2 mr-2 bg-background rounded-lg shadow-sm ">
-          <Outlet />
-        </div>
+        <Separator orientation="vertical" />
+
+        <Outlet />
       </main>
     </div>
   )
