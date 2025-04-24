@@ -1,4 +1,5 @@
 import { Button } from '@/components/ui/button'
+import { cn } from '@/lib/utils'
 import { useAuthStore } from '@/stores/auth-store'
 import { getShortName } from '@/utils/get-short-name'
 import {
@@ -11,6 +12,7 @@ import {
   StickyNote,
   User,
 } from 'lucide-react'
+import { useLocation, useNavigate } from 'react-router'
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar'
 import {
   DropdownMenu,
@@ -29,6 +31,9 @@ import {
 } from './ui/tooltip'
 
 export function Sidebar() {
+  const location = useLocation()
+  const navigate = useNavigate()
+
   const user = useAuthStore((state) => state.user)
   const clearCredentials = useAuthStore((state) => state.clearCredentials)
 
@@ -38,26 +43,76 @@ export function Sidebar() {
 
   const shortName = getShortName(user?.name ?? '')
 
+  function handleNavigateToHome() {
+    navigate('/')
+  }
+
+  function handleNavigateToCollections() {
+    navigate('/collections')
+  }
+
+  function handleNavigateToNotes() {
+    navigate('/notes')
+  }
+
+  function handleNavigateToDatabases() {
+    navigate('/databases')
+  }
+
+  function handleNavigateToPasswords() {
+    navigate('/passwords')
+  }
+
   return (
     <aside className="w-[52px] flex flex-col p-2 justify-between">
       <div className="gap-1 flex flex-col">
-        <Button size="icon" variant="secondary">
+        <Button
+          size="icon"
+          variant={location.pathname === '/' ? 'secondary' : 'ghost'}
+          className={cn(location.pathname !== '/' && 'text-zinc-400')}
+          onClick={handleNavigateToHome}
+        >
           <House />
         </Button>
 
-        <Button size="icon" variant="ghost">
+        <Button
+          size="icon"
+          variant={location.pathname === '/collections' ? 'secondary' : 'ghost'}
+          className={cn(
+            location.pathname !== '/collections' && 'text-zinc-400'
+          )}
+          onClick={handleNavigateToCollections}
+        >
           <Notebook />
         </Button>
 
-        <Button size="icon" variant="ghost" disabled>
+        <Button
+          size="icon"
+          disabled
+          variant={location.pathname === '/notes' ? 'secondary' : 'ghost'}
+          className={cn(location.pathname !== '/notes' && 'text-zinc-400')}
+          onClick={handleNavigateToNotes}
+        >
           <StickyNote />
         </Button>
 
-        <Button size="icon" variant="ghost" disabled>
+        <Button
+          size="icon"
+          disabled
+          variant={location.pathname === '/databases' ? 'secondary' : 'ghost'}
+          className={cn(location.pathname !== '/databases' && 'text-zinc-400')}
+          onClick={handleNavigateToDatabases}
+        >
           <Database />
         </Button>
 
-        <Button size="icon" variant="ghost" disabled>
+        <Button
+          size="icon"
+          disabled
+          variant={location.pathname === '/passwords' ? 'secondary' : 'ghost'}
+          className={cn(location.pathname !== '/passwords' && 'text-zinc-400')}
+          onClick={handleNavigateToPasswords}
+        >
           <LockKeyhole />
         </Button>
       </div>
