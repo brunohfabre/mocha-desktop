@@ -6,11 +6,12 @@ import MaximizeIcon from '@/assets/icons/maximize.svg'
 import MinimizeIcon from '@/assets/icons/minimize.svg'
 import RestoreIcon from '@/assets/icons/restore.svg'
 import { type ReactNode, useState } from 'react'
+import { Separator } from './ui/separator'
 
 const appWindow = getCurrentWindow()
 
 interface TitleBarProps {
-  children: ReactNode
+  children?: ReactNode
 }
 
 export function TitleBar({ children }: TitleBarProps) {
@@ -20,56 +21,65 @@ export function TitleBar({ children }: TitleBarProps) {
 
   return (
     <div className="h-[52px] flex">
-      {true && <div className="h-[52px] w-[92px]" data-tauri-drag-region />}
+      {isMacos && (
+        <>
+          <div className="h-[52px] w-[92px]" data-tauri-drag-region />
+          <Separator orientation="vertical" />
+        </>
+      )}
 
-      <div className="flex-1">{children}</div>
+      {children}
 
-      {true && (
-        <div className="flex">
-          <button
-            type="button"
-            className="px-4 cursor-pointer hover:bg-muted"
-            onClick={() => appWindow.minimize()}
-          >
-            <img src={MinimizeIcon} alt="" />
-          </button>
+      {!isMacos && (
+        <>
+          <Separator orientation="vertical" />
 
-          {!isMaximized && (
+          <div className="flex">
             <button
               type="button"
               className="px-4 cursor-pointer hover:bg-muted"
-              onClick={() => {
-                appWindow.toggleMaximize()
-
-                setIsMaximized((prevState) => !prevState)
-              }}
+              onClick={() => appWindow.minimize()}
             >
-              <img src={MaximizeIcon} alt="" />
+              <img src={MinimizeIcon} alt="" />
             </button>
-          )}
 
-          {isMaximized && (
+            {!isMaximized && (
+              <button
+                type="button"
+                className="px-4 cursor-pointer hover:bg-muted"
+                onClick={() => {
+                  appWindow.toggleMaximize()
+
+                  setIsMaximized((prevState) => !prevState)
+                }}
+              >
+                <img src={MaximizeIcon} alt="" />
+              </button>
+            )}
+
+            {isMaximized && (
+              <button
+                type="button"
+                className="px-4 cursor-pointer hover:bg-muted"
+                onClick={() => {
+                  appWindow.toggleMaximize()
+
+                  setIsMaximized((prevState) => !prevState)
+                }}
+              >
+                <img src={RestoreIcon} alt="" />
+              </button>
+            )}
+
             <button
               type="button"
-              className="px-4 cursor-pointer hover:bg-muted"
-              onClick={() => {
-                appWindow.toggleMaximize()
-
-                setIsMaximized((prevState) => !prevState)
-              }}
+              className="px-4 cursor-pointer hover:bg-destructive group"
+              onClick={() => appWindow.close()}
             >
-              <img src={RestoreIcon} alt="" />
+              <img src={CloseIcon} alt="" className="group-hover:invert" />
             </button>
-          )}
-
-          <button
-            type="button"
-            className="px-4 cursor-pointer hover:bg-destructive group"
-            onClick={() => appWindow.close()}
-          >
-            <img src={CloseIcon} alt="" className="group-hover:invert" />
-          </button>
-        </div>
+          </div>
+        </>
       )}
     </div>
   )
