@@ -60,7 +60,7 @@ export function App() {
   if (!appIsReady) {
     return (
       <div className="h-screen flex flex-col antialiased">
-        <TitleBar showButtons={false} />
+        <TitleBar />
 
         <div className="flex-1 flex flex-col items-center justify-center gap-4">
           {step}
