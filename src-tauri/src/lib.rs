@@ -1,10 +1,10 @@
-use tauri_plugin_deep_link::DeepLinkExt;
 use tauri::{AppHandle, Manager};
+use tauri_plugin_deep_link::DeepLinkExt;
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     #[allow(unused_mut)]
-    let mut builder = tauri::Builder::default();
+    let mut builder = tauri::Builder::default().plugin(tauri_plugin_dialog::init());
 
     #[cfg(desktop)]
     {
