@@ -14,6 +14,10 @@ import { Route as AppLayoutRouteImport } from './pages/_app/layout'
 import { Route as AppIndexRouteImport } from './pages/_app/index'
 import { Route as AuthSignInRouteImport } from './pages/_auth/sign-in'
 import { Route as AuthCallbackRouteImport } from './pages/_auth/callback'
+import { Route as AppOrganizationIdIndexRouteImport } from './pages/_app/$organizationId/index'
+import { Route as AppOrganizationIdProjectIdIndexRouteImport } from './pages/_app/$organizationId/$projectId/index'
+import { Route as AppOrganizationIdChar126MembersRouteImport } from './pages/_app/$organizationId/~/members'
+import { Route as AppOrganizationIdProjectIdCollectionsRouteImport } from './pages/_app/$organizationId/$projectId/collections'
 
 const AuthLayoutRoute = AuthLayoutRouteImport.update({
   id: '/_auth',
@@ -38,16 +42,47 @@ const AuthCallbackRoute = AuthCallbackRouteImport.update({
   path: '/callback',
   getParentRoute: () => AuthLayoutRoute,
 } as any)
+const AppOrganizationIdIndexRoute = AppOrganizationIdIndexRouteImport.update({
+  id: '/$organizationId/',
+  path: '/$organizationId/',
+  getParentRoute: () => AppLayoutRoute,
+} as any)
+const AppOrganizationIdProjectIdIndexRoute =
+  AppOrganizationIdProjectIdIndexRouteImport.update({
+    id: '/$organizationId/$projectId/',
+    path: '/$organizationId/$projectId/',
+    getParentRoute: () => AppLayoutRoute,
+  } as any)
+const AppOrganizationIdChar126MembersRoute =
+  AppOrganizationIdChar126MembersRouteImport.update({
+    id: '/$organizationId/~/members',
+    path: '/$organizationId/~/members',
+    getParentRoute: () => AppLayoutRoute,
+  } as any)
+const AppOrganizationIdProjectIdCollectionsRoute =
+  AppOrganizationIdProjectIdCollectionsRouteImport.update({
+    id: '/$organizationId/$projectId/collections',
+    path: '/$organizationId/$projectId/collections',
+    getParentRoute: () => AppLayoutRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/callback': typeof AuthCallbackRoute
   '/sign-in': typeof AuthSignInRoute
   '/': typeof AppIndexRoute
+  '/$organizationId': typeof AppOrganizationIdIndexRoute
+  '/$organizationId/$projectId/collections': typeof AppOrganizationIdProjectIdCollectionsRoute
+  '/$organizationId/~/members': typeof AppOrganizationIdChar126MembersRoute
+  '/$organizationId/$projectId': typeof AppOrganizationIdProjectIdIndexRoute
 }
 export interface FileRoutesByTo {
   '/callback': typeof AuthCallbackRoute
   '/sign-in': typeof AuthSignInRoute
   '/': typeof AppIndexRoute
+  '/$organizationId': typeof AppOrganizationIdIndexRoute
+  '/$organizationId/$projectId/collections': typeof AppOrganizationIdProjectIdCollectionsRoute
+  '/$organizationId/~/members': typeof AppOrganizationIdChar126MembersRoute
+  '/$organizationId/$projectId': typeof AppOrganizationIdProjectIdIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -56,12 +91,30 @@ export interface FileRoutesById {
   '/_auth/callback': typeof AuthCallbackRoute
   '/_auth/sign-in': typeof AuthSignInRoute
   '/_app/': typeof AppIndexRoute
+  '/_app/$organizationId/': typeof AppOrganizationIdIndexRoute
+  '/_app/$organizationId/$projectId/collections': typeof AppOrganizationIdProjectIdCollectionsRoute
+  '/_app/$organizationId/~/members': typeof AppOrganizationIdChar126MembersRoute
+  '/_app/$organizationId/$projectId/': typeof AppOrganizationIdProjectIdIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/callback' | '/sign-in' | '/'
+  fullPaths:
+    | '/callback'
+    | '/sign-in'
+    | '/'
+    | '/$organizationId'
+    | '/$organizationId/$projectId/collections'
+    | '/$organizationId/~/members'
+    | '/$organizationId/$projectId'
   fileRoutesByTo: FileRoutesByTo
-  to: '/callback' | '/sign-in' | '/'
+  to:
+    | '/callback'
+    | '/sign-in'
+    | '/'
+    | '/$organizationId'
+    | '/$organizationId/$projectId/collections'
+    | '/$organizationId/~/members'
+    | '/$organizationId/$projectId'
   id:
     | '__root__'
     | '/_app'
@@ -69,6 +122,10 @@ export interface FileRouteTypes {
     | '/_auth/callback'
     | '/_auth/sign-in'
     | '/_app/'
+    | '/_app/$organizationId/'
+    | '/_app/$organizationId/$projectId/collections'
+    | '/_app/$organizationId/~/members'
+    | '/_app/$organizationId/$projectId/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -113,15 +170,52 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthCallbackRouteImport
       parentRoute: typeof AuthLayoutRoute
     }
+    '/_app/$organizationId/': {
+      id: '/_app/$organizationId/'
+      path: '/$organizationId'
+      fullPath: '/$organizationId'
+      preLoaderRoute: typeof AppOrganizationIdIndexRouteImport
+      parentRoute: typeof AppLayoutRoute
+    }
+    '/_app/$organizationId/$projectId/': {
+      id: '/_app/$organizationId/$projectId/'
+      path: '/$organizationId/$projectId'
+      fullPath: '/$organizationId/$projectId'
+      preLoaderRoute: typeof AppOrganizationIdProjectIdIndexRouteImport
+      parentRoute: typeof AppLayoutRoute
+    }
+    '/_app/$organizationId/~/members': {
+      id: '/_app/$organizationId/~/members'
+      path: '/$organizationId/~/members'
+      fullPath: '/$organizationId/~/members'
+      preLoaderRoute: typeof AppOrganizationIdChar126MembersRouteImport
+      parentRoute: typeof AppLayoutRoute
+    }
+    '/_app/$organizationId/$projectId/collections': {
+      id: '/_app/$organizationId/$projectId/collections'
+      path: '/$organizationId/$projectId/collections'
+      fullPath: '/$organizationId/$projectId/collections'
+      preLoaderRoute: typeof AppOrganizationIdProjectIdCollectionsRouteImport
+      parentRoute: typeof AppLayoutRoute
+    }
   }
 }
 
 interface AppLayoutRouteChildren {
   AppIndexRoute: typeof AppIndexRoute
+  AppOrganizationIdIndexRoute: typeof AppOrganizationIdIndexRoute
+  AppOrganizationIdProjectIdCollectionsRoute: typeof AppOrganizationIdProjectIdCollectionsRoute
+  AppOrganizationIdChar126MembersRoute: typeof AppOrganizationIdChar126MembersRoute
+  AppOrganizationIdProjectIdIndexRoute: typeof AppOrganizationIdProjectIdIndexRoute
 }
 
 const AppLayoutRouteChildren: AppLayoutRouteChildren = {
   AppIndexRoute: AppIndexRoute,
+  AppOrganizationIdIndexRoute: AppOrganizationIdIndexRoute,
+  AppOrganizationIdProjectIdCollectionsRoute:
+    AppOrganizationIdProjectIdCollectionsRoute,
+  AppOrganizationIdChar126MembersRoute: AppOrganizationIdChar126MembersRoute,
+  AppOrganizationIdProjectIdIndexRoute: AppOrganizationIdProjectIdIndexRoute,
 }
 
 const AppLayoutRouteWithChildren = AppLayoutRoute._addFileChildren(
