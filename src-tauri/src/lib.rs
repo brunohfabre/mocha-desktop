@@ -1,4 +1,4 @@
-use tauri::{AppHandle, Manager, WebviewUrl, WebviewWindowBuilder};
+use tauri::{Manager, WebviewUrl, WebviewWindowBuilder};
 use tauri_plugin_deep_link::DeepLinkExt;
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
@@ -25,7 +25,7 @@ pub fn run() {
             #[cfg(any(target_os = "linux", all(debug_assertions, windows)))]
             app.deep_link().register_all()?;
 
-            let win_builder =
+            let mut win_builder =
             WebviewWindowBuilder::new(app, "main", WebviewUrl::default())
             .title("")
             .inner_size(1280.0, 800.0)
@@ -34,14 +34,28 @@ pub fn run() {
             // set transparent title bar only when building for macOS
             #[cfg(target_os = "macos")]
             {
-                use tauri_plugin_deep_link::TitleBarStyle;
-                let win_builder = win_builder.title_bar_style(TitleBarStyle::Overlay);
+                use tauri::TitleBarStyle;
+                win_builder = win_builder.title_bar_style(TitleBarStyle::Overlay);
             }
 
             #[cfg(not(target_os = "macos"))]
-            let win_builder = win_builder.decorations(false);
+            {
+                win_builder = win_builder.decorations(false);
+            }
 
             let window = win_builder.build().unwrap();
+
+            #[cfg(target_os = "macos")]
+            {
+                use cocoa::appkit::{NSAppearance, NSAppearanceNameVibrantLight, NSWindow};
+                use cocoa::base::{id};
+
+                unsafe {
+                    let ns_window = window.ns_window().unwrap() as id;
+
+                    NSWindow::setAppearance(ns_window, NSAppearance(NSAppearanceNameVibrantLight));
+                }
+            }
 
             // // set background color only when building for macOS
             // #[cfg(target_os = "macos")]

@@ -1,4 +1,5 @@
 import { createRootRoute, Outlet } from '@tanstack/react-router'
+import { Header } from '@/components/header'
 
 export const Route = createRootRoute({
   component: RootComponent,
@@ -7,7 +8,8 @@ export const Route = createRootRoute({
 function RootComponent() {
   return (
     <div className="h-screen w-full flex flex-col antialiased">
-      <div data-tauri-drag-region className="h-10 bg-red-200 w-full" />
+      <Header />
+
       <Outlet />
     </div>
   )
