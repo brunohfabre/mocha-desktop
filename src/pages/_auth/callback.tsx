@@ -31,6 +31,11 @@ function RouteComponent() {
         })
 
         setCredentials(response.data)
+
+        navigate({
+          to: '/',
+          replace: true,
+        })
       } catch {
         navigate({
           to: '/sign-in',

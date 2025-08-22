@@ -1,7 +1,7 @@
-import { createRootRoute, Outlet } from '@tanstack/react-router'
+import { createRootRouteWithContext, Outlet } from '@tanstack/react-router'
 import { Header } from '@/components/header'
 
-export const Route = createRootRoute({
+export const Route = createRootRouteWithContext<{ token: string }>()({
   component: RootComponent,
 })
 

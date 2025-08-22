@@ -4,7 +4,9 @@ use tauri_plugin_deep_link::DeepLinkExt;
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     #[allow(unused_mut)]
-    let mut builder = tauri::Builder::default().plugin(tauri_plugin_dialog::init());
+    let mut builder = tauri::Builder::default()
+        .plugin(tauri_plugin_os::init())
+        .plugin(tauri_plugin_dialog::init());
 
     #[cfg(desktop)]
     {
@@ -25,11 +27,10 @@ pub fn run() {
             #[cfg(any(target_os = "linux", all(debug_assertions, windows)))]
             app.deep_link().register_all()?;
 
-            let mut win_builder =
-            WebviewWindowBuilder::new(app, "main", WebviewUrl::default())
-            .title("")
-            .inner_size(1280.0, 800.0)
-            .min_inner_size(300.0, 300.0);
+            let mut win_builder = WebviewWindowBuilder::new(app, "main", WebviewUrl::default())
+                .title("")
+                .inner_size(1440.0, 900.0)
+                .min_inner_size(300.0, 300.0);
 
             // set transparent title bar only when building for macOS
             #[cfg(target_os = "macos")]
@@ -48,7 +49,7 @@ pub fn run() {
             #[cfg(target_os = "macos")]
             {
                 use cocoa::appkit::{NSAppearance, NSAppearanceNameVibrantLight, NSWindow};
-                use cocoa::base::{id};
+                use cocoa::base::id;
 
                 unsafe {
                     let ns_window = window.ns_window().unwrap() as id;

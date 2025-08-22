@@ -8,11 +8,10 @@ import type { UnlistenFn } from '@tauri-apps/api/event'
 import { onOpenUrl } from '@tauri-apps/plugin-deep-link'
 import { message } from '@tauri-apps/plugin-dialog'
 import { useEffect } from 'react'
-import { useAuthStore } from '@/stores/auth'
 
 export const Route = createFileRoute('/_auth')({
-  beforeLoad: () => {
-    if (useAuthStore.getState().token) {
+  beforeLoad: ({ context }) => {
+    if (context.token) {
       return redirect({ to: '/', replace: true })
     }
   },

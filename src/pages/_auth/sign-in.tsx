@@ -21,7 +21,7 @@ function RouteComponent() {
       to: '/callback',
       replace: true,
       search: {
-        code: 'c3691d09ce4a8afadf89',
+        code: '97f4c757f01d058b3b79',
       },
     })
   }
