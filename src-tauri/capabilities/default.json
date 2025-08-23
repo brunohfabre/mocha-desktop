@@ -11,6 +11,9 @@
     "deep-link:default",
     "dialog:default",
     "core:window:allow-start-dragging",
-    "os:default"
+    "os:default",
+    "core:window:allow-close",
+    "core:window:allow-toggle-maximize",
+    "core:window:allow-minimize"
   ]
 }
