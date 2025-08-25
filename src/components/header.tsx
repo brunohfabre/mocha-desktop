@@ -56,7 +56,7 @@ export function Header() {
   return (
     <>
       <div className="h-10 w-full flex">
-        <div className="flex-1" data-tauri-drag-region>
+        <div className="flex-1 flex" data-tauri-drag-region>
           {token && (
             <>
               {currentPlatform === 'macos' && (
@@ -72,9 +72,9 @@ export function Header() {
                 className="px-3 flex items-center gap-1.5"
                 data-tauri-drag-region
               >
-                <img src={Logo} alt="" className="max-h-6" />
+                <img src={Logo} alt="" className="max-h-5" />
 
-                <span className="text-base font-bold">Mocha</span>
+                <span className="text-sm font-bold">Mocha</span>
               </Link>
 
               <Separator orientation="vertical" />
