@@ -69,7 +69,7 @@ export function Header() {
 
               <Link
                 to="/"
-                className="px-3 flex items-center gap-1.5"
+                className="px-3 flex items-center gap-1.5 hover:bg-muted transition-colors"
                 data-tauri-drag-region
               >
                 <img src={Logo} alt="" className="max-h-5" />

@@ -17,7 +17,7 @@ function RouteComponent() {
   })
 
   return (
-    <div className="flex flex-col p-4 gap-4">
+    <div className="flex flex-col p-4 gap-4 text-sm">
       <span>Hello "/"!</span>
 
       <pre>{JSON.stringify(data, null, 2)}</pre>
