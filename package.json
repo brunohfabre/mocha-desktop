@@ -36,6 +36,12 @@
   },
   "devDependencies": {
     "@biomejs/biome": "2.2.0",
+    "@kubb/cli": "^3.18.2",
+    "@kubb/core": "^3.18.2",
+    "@kubb/oas": "^3.18.2",
+    "@kubb/plugin-oas": "^3.18.2",
+    "@kubb/plugin-react-query": "^3.18.2",
+    "@kubb/plugin-ts": "^3.18.2",
     "@tanstack/router-plugin": "^1.130.16",
     "@tauri-apps/cli": "^2",
     "@types/node": "^24.2.0",
